@@ -1,0 +1,1580 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Digital Production System — Stamping &amp; Press Shop (Full)</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{--bg:#f4f6f9;--card:#ffffff;--card-hover:#fff7ed;--line:#e3e8ef;--txt:#1f2937;--muted:#7b8694;
+--blue:#f97316;--blue-l:#fff4ea;--cyan:#0891b2;--green:#16a34a;--green-l:#e9f7ee;
+--amber:#f59e0b;--amber-l:#fff6e5;--red:#dc2626;--red-l:#fdeaea;--purple:#7c3aed;
+--sh:0 1px 2px rgba(16,24,40,.06),0 4px 14px rgba(16,24,40,.08);--r:14px}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--txt);font-family:"Noto Sans Thai","Sarabun","Segoe UI",Tahoma,sans-serif;font-size:14px;line-height:1.55}
+h1,h2,h3,h4{margin:0;font-weight:700}
+button{font-family:inherit;cursor:pointer}
+input,select,textarea{font-family:inherit;font-size:14px}
+header{background:#fff;padding:14px 18px;position:sticky;top:0;z-index:60;border-bottom:3px solid var(--blue);box-shadow:0 2px 10px rgba(16,24,40,.06)}
+.hd-wrap{max-width:1500px;margin:0 auto;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.logo{width:42px;height:42px;border-radius:11px;background:linear-gradient(135deg,var(--blue),#fb923c);display:grid;place-items:center;font-size:21px;color:#fff;box-shadow:0 4px 10px rgba(249,115,22,.35)}
+.hd-t h1{font-size:17px}.hd-t p{margin:1px 0 0;font-size:11.5px;color:var(--muted)}
+.hd-right{margin-left:auto;display:flex;gap:10px;flex-wrap:wrap}
+.pill{background:#f8fafc;border:1px solid var(--line);padding:5px 11px;border-radius:999px;font-size:12px;color:var(--muted)}
+.pill.live{background:var(--green-l);border-color:rgba(16,185,129,.3);color:#34d399}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#34d399;margin-right:6px;animation:bl 1.4s infinite}
+@keyframes bl{0%,100%{opacity:1}50%{opacity:.25}}
+nav.tabs{background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:70px;z-index:55;overflow-x:auto}
+.tabs-in{max-width:1500px;margin:0 auto;display:flex;gap:4px;padding:0 10px;min-width:max-content}
+.tab{border:0;background:none;padding:14px 16px;font-size:14.5px;font-weight:600;color:var(--muted);border-bottom:3px solid transparent;white-space:nowrap}
+.tab.active{color:var(--blue);border-bottom-color:var(--blue)}
+main{max-width:1500px;margin:0 auto;padding:18px 14px 60px}
+.page{display:none}.page.active{display:block}
+.subtabs{display:inline-flex;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:4px;margin-bottom:16px}
+.subtab{border:0;background:none;padding:8px 18px;border-radius:999px;font-weight:600;font-size:13.5px;color:var(--muted)}
+.subtab.active{background:var(--blue);color:#fff}
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}.g5{grid-template-columns:repeat(5,1fr)}.g6{grid-template-columns:repeat(6,1fr)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px;box-shadow:var(--sh)}
+.card-h{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.card-h h3{font-size:14.5px}.card-h .sub{font-size:11.5px;color:var(--muted)}
+.sec-title{display:flex;align-items:center;gap:9px;margin:22px 0 12px;font-size:15px;font-weight:700}
+.sec-title::before{content:"";width:4px;height:17px;background:var(--blue);border-radius:3px}
+.sec-title .n{background:var(--blue-l);color:var(--blue);font-size:11px;font-weight:800;border-radius:6px;padding:2px 7px;flex-shrink:0}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px 15px;position:relative;overflow:hidden}
+.kpi::after{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--blue)}
+.kpi.ok::after{background:var(--green)}.kpi.warn::after{background:var(--amber)}.kpi.bad::after{background:var(--red)}
+.kpi .lb{font-size:11.5px;color:var(--muted);font-weight:600}
+.kpi .vl{font-size:25px;font-weight:800;margin-top:4px}
+.kpi .un{font-size:12px;color:var(--muted);margin-left:3px}
+.kpi .df{font-size:11.5px;margin-top:3px;font-weight:600}
+.up{color:#16a34a}.down{color:#dc2626}
+.cbox{position:relative;height:260px}.cbox.sm{height:200px}.cbox.xs{height:150px}
+.tw{overflow-x:auto;border-radius:10px;border:1px solid var(--line)}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:560px;background:var(--card)}
+th{background:#f8fafc;font-weight:700;text-align:left;padding:10px 11px;border-bottom:2px solid var(--line);white-space:nowrap;font-size:12.5px}
+td{padding:9px 11px;border-bottom:1px solid var(--line);white-space:nowrap}
+tbody tr:hover{background:var(--card-hover)}
+.tc{text-align:center}.tr{text-align:right}
+.mono{font-family:ui-monospace,Consolas,monospace;font-size:12.5px}
+.bg{display:inline-block;padding:3px 9px;border-radius:999px;font-size:11.5px;font-weight:700;white-space:nowrap}
+.b-g{background:var(--green-l);color:#15803d}.b-a{background:var(--amber-l);color:#b45309}
+.b-r{background:var(--red-l);color:#b91c1c}.b-b{background:var(--blue-l);color:#c2410c}
+.b-n{background:#f1f5f9;color:var(--muted)}.b-p{background:rgba(139,92,246,.15);color:#7c3aed}
+.pbar{height:7px;background:var(--line);border-radius:5px;overflow:hidden;min-width:70px}
+.pbar i{display:block;height:100%;border-radius:5px;background:var(--blue)}
+.fgrid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
+label.fl{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:5px}
+.inp{width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:9px;background:var(--bg);color:var(--txt);outline:none}
+.inp[readonly]{background:#f1f5f9;color:var(--muted);font-weight:600}
+.inp.err{border-color:var(--red)}
+.btn{border:0;padding:10px 17px;border-radius:9px;font-weight:700;font-size:13.5px;background:var(--blue);color:#fff}
+.btn:hover{filter:brightness(1.15)}
+.btn.gh{background:var(--card);color:var(--blue);border:1px solid var(--blue)}
+.btn.gr{background:var(--green)}.btn.rd{background:var(--red)}.btn.am{background:var(--amber);color:#111827}
+.btn.gy{background:var(--line);color:var(--txt)}.btn.pp{background:var(--purple)}
+.btn.big{padding:15px;font-size:15px;width:100%}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.row-end{display:flex;gap:9px;flex-wrap:wrap;align-items:flex-end}
+.ov{position:fixed;inset:0;background:rgba(3,7,18,.75);display:none;z-index:200;align-items:center;justify-content:center;padding:14px}
+.ov.on{display:flex}
+.mod{background:var(--card);border:1px solid var(--line);border-radius:16px;width:100%;max-width:620px;max-height:92vh;overflow:auto}
+.mod-h{background:linear-gradient(110deg,#0f172a,#1e293b);padding:15px 18px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;border-bottom:1px solid var(--line);color:#fff}
+.mod-h p{margin:2px 0 0;font-size:11.5px;color:var(--muted)}
+.x{background:rgba(255,255,255,.08);border:0;color:#fff;width:30px;height:30px;border-radius:8px}
+.mod-b{padding:18px}.mod-f{padding:0 18px 18px;display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
+.mbanner{display:flex;align-items:center;gap:12px;border-radius:12px;padding:12px 14px;margin-bottom:16px;color:#fff;font-weight:800}
+.mbanner .mc{font-size:21px}.mbanner .sm{font-size:11.5px;opacity:.9}
+.confirm-box{border:2px dashed rgba(245,158,11,.4);background:var(--amber-l);border-radius:11px;padding:11px 13px;margin-top:14px;display:flex;gap:10px}
+.confirm-box input{width:19px;height:19px;accent-color:#f59e0b}
+.confirm-box label{font-size:12.5px;font-weight:700;color:#92400e;cursor:pointer}
+.stations{display:flex;gap:8px;flex-wrap:wrap}
+.stab{border:1px solid var(--line);background:var(--card);color:var(--muted);padding:9px 14px;border-radius:10px;font-weight:700;font-size:13.5px;display:flex;align-items:center;gap:7px}
+.sdot{width:9px;height:9px;border-radius:50%;background:#64748b}
+.sdot.run{background:#34d399;animation:bl 1.3s infinite}.sdot.set{background:#fbbf24}.sdot.alm{background:#f87171;animation:bl .6s infinite}
+.stcard{border:1px solid var(--line);border-radius:12px;padding:11px 12px;background:var(--card);cursor:pointer;border-left-width:5px}
+.stcard.on{background:var(--card-hover);box-shadow:0 0 0 2px rgba(249,115,22,.35)}
+.mcard{border:1px solid var(--line);border-radius:13px;background:var(--card);padding:13px 14px;border-top:4px solid var(--blue)}
+.mcard .top{display:flex;align-items:center;gap:9px;margin-bottom:8px}
+.mcard .nm{font-size:15px;font-weight:800}.mcard .ln{font-size:11px;color:var(--muted);font-weight:600}
+.mcard .big{font-size:24px;font-weight:800;margin-top:2px}
+.mrow{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:9px}
+.mrow div{background:var(--bg);border-radius:8px;padding:6px 8px;text-align:center;border:1px solid var(--line)}
+.mrow .k{font-size:9.5px;color:var(--muted);font-weight:700}
+.mrow .v{font-size:13px;font-weight:800;margin-top:1px}
+.mcard .ftr{margin-top:9px;font-size:11px;color:var(--muted);border-top:1px dashed var(--line);padding-top:7px;display:flex;justify-content:space-between}
+.plc{background:linear-gradient(135deg,#0f172a,#1e293b);border-radius:var(--r);padding:16px;border:1px solid var(--line);color:#fff}
+.plc .st{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.led{width:16px;height:16px;border-radius:50%;box-shadow:0 0 0 4px rgba(255,255,255,.05)}
+.led.run{background:#34d399;animation:bl 1.3s infinite}.led.stop{background:#64748b}
+.led.alm{background:#f87171;animation:bl .6s infinite}.led.set{background:#fbbf24}
+.plcv{display:grid;gap:9px;grid-template-columns:repeat(auto-fit,minmax(105px,1fr));margin-top:14px}
+.plcv div{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:9px 11px}
+.plcv .l{font-size:10.5px;opacity:.7;font-weight:600}.plcv .v{font-size:17px;font-weight:800;margin-top:2px}
+.counter{text-align:center;padding:10px 0}
+.counter .num{font-size:50px;font-weight:800;line-height:1}
+.counter .of{font-size:14px;color:var(--muted);font-weight:600;margin-top:5px}
+.lockbar{border-radius:13px;padding:13px 16px;margin-bottom:14px;display:flex;align-items:center;gap:13px;flex-wrap:wrap;color:#fff}
+.lockbar.off{background:linear-gradient(110deg,#1e293b,#0f172a);border:1px solid var(--line)}
+.lockbar .t{font-size:16px;font-weight:800}.lockbar .s{font-size:11.5px;font-weight:600;color:var(--muted)}
+.lockbar .sp{margin-left:auto;display:flex;gap:8px}
+.btn-w{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);color:#fff;padding:9px 15px;border-radius:9px;font-weight:700;font-size:13px}
+#oprBody.lockout{opacity:.4;pointer-events:none;filter:grayscale(.4)}
+.report-sheet{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px}
+.report-header{display:flex;justify-content:space-between;border-bottom:2px solid var(--line);padding-bottom:14px;margin-bottom:16px;flex-wrap:wrap;gap:10px}
+.report-title{font-size:18px;font-weight:800}
+.report-meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;background:var(--bg);padding:12px;border-radius:10px;border:1px solid var(--line);margin-bottom:16px}
+.sign-box{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:24px;text-align:center}
+.sign-line{border-top:1px dashed var(--muted);margin-top:45px;padding-top:6px;font-size:12px;color:var(--muted)}
+.ai-box{background:linear-gradient(135deg,rgba(249,115,22,.08),rgba(124,58,237,.08));border:1px solid rgba(249,115,22,.25);border-radius:12px;padding:16px;margin-top:14px}
+.ai-box h4{color:var(--blue);font-size:15px;margin-bottom:8px}
+.tl{position:relative;height:42px;background:var(--bg);border:1px solid var(--line);border-radius:9px;overflow:hidden;margin:8px 0 4px}
+.tl i{position:absolute;top:0;bottom:0;display:block}
+.tl-ax{display:flex;justify-content:space-between;font-size:10.5px;color:var(--muted);font-weight:600}
+.lg{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px;font-size:12px}
+.lg span{display:flex;align-items:center;gap:5px}
+.sw{width:11px;height:11px;border-radius:3px;display:inline-block}
+.step{position:relative;padding-left:40px;padding-bottom:18px}
+.step::before{content:"";position:absolute;left:14px;top:30px;bottom:-4px;width:2px;background:var(--line)}
+.step:last-child::before{display:none}
+.step .nm{position:absolute;left:0;top:2px;width:30px;height:30px;border-radius:50%;background:var(--blue);color:#fff;display:grid;place-items:center;font-weight:800;font-size:13px}
+.step.s2 .nm{background:var(--cyan)}.step.s3 .nm{background:var(--amber)}.step.s4 .nm{background:var(--green)}
+.kv{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));margin-top:10px}
+.kv div{background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:8px 11px}
+.kv .k{font-size:10.5px;color:var(--muted);font-weight:600}
+.kv .v{font-size:13.5px;font-weight:700;margin-top:1px}
+.chip{display:inline-block;background:var(--blue-l);color:#c2410c;border:1px solid rgba(249,115,22,.3);border-radius:999px;padding:5px 12px;font-size:12px;font-weight:600;margin:3px 4px 0 0;cursor:pointer}
+.exp{cursor:pointer}.exp-row td{background:#f8fafc;padding:0}.exp-in{padding:14px 16px}
+.caret{display:inline-block;transition:.2s;color:var(--blue);font-weight:800}
+.caret.open{transform:rotate(90deg)}
+.empty{text-align:center;padding:40px 16px;color:var(--muted)}
+.log-s{max-height:340px;overflow:auto}
+.note{font-size:12px;color:var(--muted)}
+.hr{height:1px;background:var(--line);margin:14px 0}
+.keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.keypad button{padding:13px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--txt);font-size:17px;font-weight:800}
+@media(max-width:1200px){.g6{grid-template-columns:repeat(3,1fr)}.g5{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:860px){.g3,.g2{grid-template-columns:1fr}.g6,.g5{grid-template-columns:repeat(2,1fr)}nav.tabs{top:64px}}
+@media(max-width:520px){.g4,.g6,.g5{grid-template-columns:1fr}.sign-box{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hd-wrap">
+    <div class="logo">⚙️</div>
+    <div class="hd-t">
+      <h1>DIGITAL PRODUCTION SYSTEM <span style="color:var(--blue)">— STAMPING &amp; PRESS SHOP</span></h1>
+      <p>ระบบบันทึกและติดตามการผลิตดิจิทัล · PRESS LINE 600T – 2500T · REAL-TIME PLC/SCADA</p>
+    </div>
+    <div class="hd-right">
+      <span class="pill live"><span class="dot"></span>เชื่อมต่อ PLC 5 เครื่อง</span>
+      <span class="pill" id="hdLock">🔒 ล็อกแล้ว 5 สถานี</span>
+      <span class="pill" id="hdShift">กะ A</span>
+      <span class="pill" id="hdClock">--:--:--</span>
+    </div>
+  </div>
+</header>
+
+<nav class="tabs"><div class="tabs-in">
+  <button class="tab active" data-page="dash">📊 แดชบอร์ด</button>
+  <button class="tab" data-page="sup">📋 หน้าหัวหน้างาน &amp; รายงาน</button>
+  <button class="tab" data-page="opr">🖐️ บันทึกข้อมูลพนักงาน</button>
+  <button class="tab" data-page="ana">📈 วิเคราะห์ &amp; AI</button>
+  <button class="tab" data-page="trc">🔎 สืบย้อนกลับ</button>
+</div></nav>
+
+<main>
+
+<!-- ============ DASHBOARD ============ -->
+<section id="page-dash" class="page active">
+  <div class="subtabs">
+    <button class="subtab active" data-sub="exec">👔 ผู้บริหาร</button>
+    <button class="subtab" data-sub="line">🏭 หน้าไลน์การผลิต</button>
+  </div>
+
+  <div id="sub-exec">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:4px">
+      <div class="sect" style="margin:0"><span class="n">1</span>สถานะเครื่องจักรแบบเรียลไทม์ (Real-time Press Machine Status)</div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span class="note" id="execDate">—</span>
+        <select class="inp" id="execRange" style="width:auto;padding:6px 10px">
+          <option value="today">วันนี้</option>
+          <option value="7">7 วันล่าสุด</option>
+          <option value="14" selected>14 วันล่าสุด</option>
+        </select>
+      </div>
+    </div>
+    <div class="grid g5" id="mcStatusGrid"></div>
+
+    <div class="grid g2" style="margin-top:10px;grid-template-columns:1.25fr 1fr">
+      <div>
+        <div class="sect" style="margin-top:4px"><span class="n">2</span>ผลผลิตแยกตามไลน์ผลิต (Production by Line)</div>
+        <div class="tw">
+          <table id="tblLine">
+            <thead><tr>
+              <th>ไลน์ / เครื่องปั๊ม</th><th class="tc">สถานะ</th><th>Part No.</th>
+              <th class="tr">Plan</th><th class="tr">Actual</th><th class="tc">%บรรลุ</th>
+              <th class="tr">Good</th><th class="tr">NG</th><th class="tc">%NG</th><th class="tc">OEE</th>
+            </tr></thead>
+            <tbody></tbody>
+            <tfoot></tfoot>
+          </table>
+        </div>
+        <div class="grid g4" id="kpiBox" style="margin-top:10px"></div>
+      </div>
+
+      <div>
+        <div class="sect" style="margin-top:4px"><span class="n">3-6</span>วิเคราะห์ประสิทธิภาพแยกตามเครื่องจักร</div>
+        <div class="grid g2">
+          <div class="card"><div class="card-h"><h3>3. OEE แยกตามเครื่องจักร</h3><span class="sub">เป้า ≥ 85%</span></div><div class="cbox sm"><canvas id="cOeeByMc"></canvas></div></div>
+          <div class="card"><div class="card-h"><h3>4. Availability แยกตามเครื่อง</h3><span class="sub">เป้า ≥ 90%</span></div><div class="cbox sm"><canvas id="cAvailByMc"></canvas></div></div>
+          <div class="card"><div class="card-h"><h3>5. Quality (Yield) แยกตามเครื่อง</h3><span class="sub">เป้า ≥ 99%</span></div><div class="cbox sm"><canvas id="cQualByMc"></canvas></div></div>
+          <div class="card"><div class="card-h"><h3>6. Good vs Defect แยกตามเครื่อง</h3><span class="sub">ชิ้น</span></div><div class="cbox sm"><canvas id="cGvdByMc"></canvas></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="sub-line" style="display:none">
+    <div class="card">
+      <div class="card-h">
+        <div><h2 style="font-size:17px">มุมมองหน้าไลน์การผลิต</h2><div class="sub">ข้อมูลเรียลไทม์จาก PLC / SCADA</div></div>
+        <div class="row-end"><div><label class="fl">เลือกไลน์ผลิต</label><select class="inp" id="selLine" style="min-width:200px"></select></div>
+        <button class="btn gh" onclick="renderLineView()">🔄 รีเฟรช</button></div>
+      </div>
+      <div class="grid g5" id="lineStrip" style="margin-bottom:14px"></div>
+      <div class="grid g4" id="lineKpi"></div>
+    </div>
+
+    <div class="grid g2" style="margin-top:14px">
+      <div class="card"><div class="card-h"><h3>งานที่กำลังผลิต</h3><span class="sub" id="jobStatus"></span></div><div id="jobBox"></div></div>
+      <div class="card"><div class="card-h"><h3>OEE Breakdown เฉพาะไลน์</h3></div><div class="cbox sm"><canvas id="cLineOEE"></canvas></div></div>
+    </div>
+
+    <div class="card" style="margin-top:14px">
+      <div class="card-h"><h3>ผลผลิตรายชั่วโมง</h3><span class="sub">เป้าหมาย vs ผลิตจริง</span></div><div class="cbox sm"><canvas id="cHourly"></canvas></div>
+    </div>
+
+    <div class="card" style="margin-top:14px">
+      <div class="card-h"><h3>Downtime Timeline (08:00–20:00)</h3><span class="sub" id="dtSum"></span></div>
+      <div class="tl" id="tlBar"></div><div class="tl-ax" id="tlAx"></div><div class="lg" id="tlLg"></div>
+      <button class="btn gh" style="width:100%;margin-top:12px;font-size:12.5px" onclick="document.querySelector('[data-page=sup]').click();document.querySelector('[data-supsub=detail]').click();$('selLineDetail').value=$('selLine').value;renderLineDetail()">📊 ดู Pareto / ตาราง Downtime / บันทึกคุณภาพแบบละเอียด → หน้ารายงาน</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SUPERVISOR ============ -->
+<section id="page-sup" class="page">
+  <div class="subtabs">
+    <button class="subtab active" data-supsub="filter">🔍 ค้นหา &amp; ดึงประวัติ</button>
+    <button class="subtab" data-supsub="report">📄 รายงานสรุปกะทางการ</button>
+    <button class="subtab" data-supsub="detail">📊 รายละเอียดเชิงลึก</button>
+  </div>
+
+  <div id="sup-filter">
+    <div class="card">
+      <div class="card-h"><div><h2 style="font-size:17px">ดึงข้อมูลบันทึกการผลิตย้อนหลัง</h2>
+        <div class="sub">แทนแฟ้ม Daily Production Record / Quality Record Sheet</div></div></div>
+      <div class="fgrid">
+        <div><label class="fl">วันที่เริ่มต้น</label><input type="date" class="inp" id="fFrom"></div>
+        <div><label class="fl">วันที่สิ้นสุด</label><input type="date" class="inp" id="fTo"></div>
+        <div><label class="fl">ไลน์ผลิต</label><select class="inp" id="fLine"></select></div>
+        <div><label class="fl">กะ</label><select class="inp" id="fShift"><option value="">ทั้งหมด</option><option>กะ A</option><option>กะ B</option></select></div>
+        <div><label class="fl">Part No.</label><select class="inp" id="fPart"></select></div>
+      </div>
+      <div class="row-end" style="margin-top:14px">
+        <button class="btn" onclick="runFilter()">🔍 ค้นหาข้อมูล</button>
+        <button class="btn gy" onclick="resetFilter()">↺ ล้างเงื่อนไข</button>
+        <button class="btn gr" onclick="exportCSV()">⬇️ Export CSV</button>
+        <span class="note" id="supInfo" style="margin-left:auto"></span>
+      </div>
+    </div>
+
+    <div class="grid g6" id="supKpi" style="margin-top:14px"></div>
+
+    <div class="grid g2" style="margin-top:14px">
+      <div class="card"><div class="card-h"><h3>สรุปอัตรา OK / NG</h3></div><div class="cbox sm"><canvas id="cSupOkNg"></canvas></div></div>
+      <div class="card"><div class="card-h"><h3>ของเสียแยกตามประเภท</h3></div><div class="cbox sm"><canvas id="cSupDef"></canvas></div></div>
+    </div>
+
+    <div class="card" style="margin-top:14px">
+      <div class="card-h"><h3>ตารางบันทึกการผลิต</h3><span class="sub">👉 คลิกแถวเพื่อดู Downtime และบันทึกคุณภาพ</span></div>
+      <div class="tw"><table id="tblSup"><thead><tr>
+        <th style="width:34px"></th><th>วันที่</th><th>ไลน์</th><th>กะ</th><th>Part No.</th><th>Lot No.</th>
+        <th class="tr">แผน</th><th class="tr">ผลิตจริง</th><th class="tr">OK</th><th class="tr">NG</th>
+        <th class="tc">%NG</th><th class="tr">Downtime</th><th class="tc">OEE</th><th>ผู้ควบคุม</th>
+      </tr></thead><tbody></tbody></table></div>
+    </div>
+  </div>
+
+  <div id="sup-report" style="display:none">
+    <div class="report-sheet">
+      <div class="report-header">
+        <div><div class="report-title">📋 รายงานสรุปผลการผลิตประจำกะ (Official Shift Production Report)</div>
+          <div class="note">โรงงาน Stamping &amp; Blanking Press Shop · ออกโดยระบบดิจิทัลอัตโนมัติ</div></div>
+        <div class="row-end"><button class="btn gh" onclick="window.print()">🖨️ พิมพ์รายงาน</button>
+          <button class="btn gr" onclick="toast('ส่งออกไฟล์ PDF เรียบร้อย')">💾 บันทึก PDF</button></div>
+      </div>
+      <div class="report-meta">
+        <div><label class="fl">วันที่รายงาน</label><b id="repDate">—</b></div>
+        <div><label class="fl">กะการทำงาน</label><b>กะ A (08:00 - 20:00 น.)</b></div>
+        <div><label class="fl">หัวหน้ากะ</label><b>ปรีชา ธนากร (LD-02)</b></div>
+        <div><label class="fl">สถานะเอกสาร</label><span class="bg b-g">✔ ผ่านการอนุมัติแล้ว</span></div>
+      </div>
+
+      <div class="sec-title">สรุปผลผลิตรวมทุกเครื่องจักร (Summary by Machine)</div>
+      <div class="tw"><table id="tblRep"><thead><tr>
+        <th>เครื่องจักร</th><th>กระบวนการ</th><th>Part No.</th><th class="tr">แผน</th><th class="tr">ผลิตจริง</th>
+        <th class="tr">OK</th><th class="tr">NG</th><th class="tc">%เสีย</th><th class="tr">Downtime</th><th class="tc">OEE</th>
+      </tr></thead><tbody></tbody><tfoot></tfoot></table></div>
+
+      <div class="sec-title">บันทึกการหยุดเครื่องในกะ (Downtime Log)</div>
+      <div class="tw"><table id="tblRepDt"><thead><tr><th>เวลา</th><th>เครื่อง</th><th class="tr">นาที</th><th>ประเภท</th><th>สาเหตุ</th><th>การแก้ไข</th></tr></thead><tbody></tbody></table></div>
+
+      <div class="grid g2" style="margin-top:16px">
+        <div class="card" style="background:var(--bg)">
+          <h4 style="font-size:13.5px;margin-bottom:8px">⚠️ ปัญหาสำคัญในกะ (Major Issues)</h4>
+          <ul style="margin:0;padding-left:18px;font-size:13px;color:var(--muted)" id="repIssues"></ul>
+        </div>
+        <div class="card" style="background:var(--bg)">
+          <h4 style="font-size:13.5px;margin-bottom:8px">💡 ข้อเสนอแนะสำหรับกะถัดไป</h4>
+          <p style="margin:0;font-size:13px;color:var(--muted)">
+            - ตรวจสอบความพร้อมม้วน Coil สำหรับไลน์ Blanking (600T/800T) เนื่องจากอัตราการใช้เหล็กสูง<br>
+            - เตรียมชุด Punch สำรองสำหรับงาน Stamping ชิ้นส่วน Suspension ในกะ B<br>
+            - ทบทวนขั้นตอน Die Change ตามแนวทาง SMED เพื่อลดเวลาสูญเสีย
+          </p>
+        </div>
+      </div>
+
+      <div class="sign-box">
+        <div><div class="sign-line">นายสมชาย ใจดี</div><div style="font-size:11.5px;color:var(--muted)">ผู้บันทึกข้อมูล (Operator Lead)</div></div>
+        <div><div class="sign-line">นายปรีชา ธนากร</div><div style="font-size:11.5px;color:var(--muted)">หัวหน้ากะ (Shift Supervisor)</div></div>
+        <div><div class="sign-line">นายสุเมธ ชัยวัฒน์</div><div style="font-size:11.5px;color:var(--muted)">ผู้จัดการฝ่ายผลิต (Plant Manager)</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="sup-detail" style="display:none">
+    <div class="sec-title" style="margin-top:0">รายละเอียดเชิงลึก — ภาพรวมผู้บริหาร (ย้ายมาจากหน้า Dashboard เพื่อให้หน้าแดชบอร์ดพอดี 1 หน้าจอ)</div>
+    <div class="grid g2">
+      <div class="card"><div class="card-h"><h3>Plan vs Actual รายวัน (7 วัน)</h3><span class="sub">ชิ้น</span></div><div class="cbox"><canvas id="cPvA"></canvas></div></div>
+      <div class="card"><div class="card-h"><h3>Production Trend (14 วัน)</h3><span class="sub">ผลผลิต / %ของเสีย</span></div><div class="cbox"><canvas id="cTrend"></canvas></div></div>
+    </div>
+
+    <div class="grid g3" style="margin-top:14px">
+      <div class="card"><div class="card-h"><h3>Good vs Defect</h3></div><div class="cbox sm"><canvas id="cDonut"></canvas></div></div>
+      <div class="card"><div class="card-h"><h3>Defect Pareto</h3><span class="sub">สะสม %</span></div><div class="cbox sm"><canvas id="cPareto"></canvas></div></div>
+      <div class="card"><div class="card-h"><h3>Downtime Analysis</h3><span class="sub">นาที</span></div><div class="cbox sm"><canvas id="cDown"></canvas></div></div>
+    </div>
+
+    <div class="sec-title">OEE Breakdown ทั้งโรงงาน</div>
+    <div class="grid g4">
+      <div class="card"><div class="card-h"><h3>OEE รวมทั้งโรงงาน</h3></div><div class="cbox xs"><canvas id="gOEE"></canvas></div></div>
+      <div class="card"><div class="card-h"><h3>Availability</h3></div><div class="cbox xs"><canvas id="gA"></canvas></div></div>
+      <div class="card"><div class="card-h"><h3>Performance</h3></div><div class="cbox xs"><canvas id="gP"></canvas></div></div>
+      <div class="card"><div class="card-h"><h3>Quality</h3></div><div class="cbox xs"><canvas id="gQ"></canvas></div></div>
+    </div>
+
+    <div class="sec-title">Cycle Time &amp; พลังงาน</div>
+    <div class="grid g2">
+      <div class="card"><div class="card-h"><h3>Cycle Time &amp; Productivity</h3><span class="sub">วิ/ชิ้น · ชิ้น/ชม.</span></div><div class="cbox"><canvas id="cCycle"></canvas></div></div>
+      <div class="card"><div class="card-h"><h3>Energy Consumption</h3><span class="sub">kWh · kWh/1,000 ชิ้น</span></div><div class="cbox"><canvas id="cEnergy"></canvas></div></div>
+    </div>
+
+    <div class="sec-title">การแจ้งเตือนและการตอบสนอง</div>
+    <div class="grid g2">
+      <div class="card"><div class="card-h"><h3>⚠️ Production Alert &amp; Action</h3><span class="sub" id="alertCnt"></span></div>
+        <div class="tw log-s"><table id="tblAlert"><thead><tr><th>เวลา</th><th>ไลน์</th><th>ปัญหา</th><th>ผลกระทบ</th><th>การแก้ไข</th><th class="tc">สถานะ</th></tr></thead><tbody></tbody></table></div></div>
+      <div class="card"><div class="card-h"><h3>🔔 Alerts &amp; Notifications</h3><span class="sub">เรียลไทม์</span></div>
+        <div class="tw log-s"><table id="tblNoti"><thead><tr><th>เวลา</th><th class="tc">ระดับ</th><th>ข้อความ</th><th>แหล่ง</th></tr></thead><tbody></tbody></table></div></div>
+    </div>
+
+    <div class="sec-title">เครื่องจักร &amp; การบำรุงรักษา</div>
+    <div class="grid g2">
+      <div class="card"><div class="card-h"><h3>🏭 Machine Status</h3></div>
+        <div class="tw"><table id="tblMc"><thead><tr><th>เครื่อง</th><th class="tc">สถานะ</th><th class="tr">SPM</th><th class="tr">Load%</th><th class="tr">Oil °C</th><th class="tc">ล็อกสถานี</th><th>ผู้ปฏิบัติงาน</th><th class="tr">ชม.สะสม</th></tr></thead><tbody></tbody></table></div></div>
+      <div class="card"><div class="card-h"><h3>🛠️ Predictive Maintenance</h3></div>
+        <div class="tw"><table id="tblPdm"><thead><tr><th>เครื่อง / ชิ้นส่วน</th><th class="tc">สุขภาพ</th><th class="tr">อายุคงเหลือ</th><th class="tc">ระดับ</th></tr></thead><tbody></tbody></table></div></div>
+    </div>
+
+    <div class="sec-title">รายละเอียดไลน์การผลิต (เลือกไลน์)</div>
+    <div class="card">
+      <div class="row-end"><div><label class="fl">เลือกไลน์ผลิต</label><select class="inp" id="selLineDetail" style="min-width:200px"></select></div>
+        <button class="btn gh" onclick="renderLineDetail()">🔄 รีเฟรช</button></div>
+    </div>
+    <div class="card" style="margin-top:14px">
+      <div class="card-h"><h3>Pareto สาเหตุหยุดเครื่องของไลน์นี้</h3></div><div class="cbox"><canvas id="cLinePareto"></canvas></div>
+    </div>
+    <div class="card" style="margin-top:14px">
+      <div class="card-h"><h3>ตาราง Downtime โดยละเอียด</h3></div>
+      <div class="tw"><table id="tblDt"><thead><tr><th>เริ่ม</th><th>สิ้นสุด</th><th class="tr">นาที</th><th>ประเภท</th><th>สาเหตุ / การแก้ไข</th><th>ผู้บันทึก</th></tr></thead><tbody></tbody></table></div>
+    </div>
+    <div class="card" style="margin-top:14px">
+      <div class="card-h"><h3>บันทึกคุณภาพล่าสุดของไลน์</h3><span class="sub">In-Process Quality Record</span></div>
+      <div class="tw log-s"><table id="tblLq"><thead><tr><th>เวลา</th><th>จุดตรวจ</th><th class="tr">ชิ้นที่</th><th class="tr">Thk</th><th class="tr">Pitch</th><th class="tr">DieH</th><th class="tr">SPM</th><th class="tc">ผล</th><th>Pallet</th><th>ผู้ตรวจ</th></tr></thead><tbody></tbody></table></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ OPERATOR ============ -->
+<section id="page-opr" class="page">
+  <div class="card">
+    <div class="card-h"><div><h2 style="font-size:17px">สถานีบันทึกข้อมูลการผลิต</h2>
+      <div class="sub">ต้องยืนยัน PIN และรหัสสถานีหน้าเครื่องก่อนบันทึก (ป้องกันคีย์ผิดเครื่อง)</div></div></div>
+    <div class="stations" id="stTabs"></div>
+    <div class="grid g5" id="stOverview" style="margin-top:14px"></div>
+  </div>
+
+  <div class="sec-title" id="stTitle">สถานี</div>
+  <div id="lockBar"></div>
+
+  <div id="oprBody">
+    <div class="grid g2">
+      <div class="plc">
+        <div class="st">
+          <span class="led run" id="led"></span>
+          <div><div style="font-size:12px;opacity:.72;font-weight:600" id="plcProc">กระบวนการ</div>
+            <div style="font-size:21px;font-weight:800" id="mcState">เดินเครื่อง (RUN)</div></div>
+          <div style="margin-left:auto;text-align:right">
+            <div style="font-size:14px;font-weight:800" id="mcName">PRESS-600T</div>
+            <div class="mono" style="font-size:12px;opacity:.9" id="plcTime">--:--:--</div></div>
+        </div>
+        <div class="plcv" id="plcParams"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-h"><h3>ข้อมูลงานปัจจุบัน — <span id="oLineName" style="color:var(--blue)">—</span></h3>
+          <span class="bg b-g" id="jobBadge">กำลังผลิต</span></div>
+        <div class="fgrid">
+          <div><label class="fl">สถานี / เครื่องปั๊ม</label><input class="inp" id="oMc" readonly></div>
+          <div><label class="fl">กะทำงาน</label><select class="inp" id="oShift"><option>กะ A (08:00-20:00)</option><option>กะ B (20:00-08:00)</option></select></div>
+          <div><label class="fl">Part No.</label><select class="inp" id="oPart"></select></div>
+          <div><label class="fl">Lot No.</label><input class="inp" id="oLot" readonly></div>
+          <div><label class="fl">แม่พิมพ์ (Die No.)</label><input class="inp" id="oDie" readonly></div>
+          <div><label class="fl">Coil Lot (วัตถุดิบ)</label><input class="inp" id="oCoil" readonly></div>
+          <div><label class="fl">เป้าหมายการผลิต (ชิ้น)</label><input class="inp" id="oTarget" type="number"></div>
+          <div><label class="fl">ผู้ปฏิบัติงาน</label><input class="inp" id="oOpr" readonly></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid g3" style="margin-top:14px">
+      <div class="card">
+        <div class="card-h"><h3>จำนวนการผลิต</h3><span class="sub">ตรวจคุณภาพอัตโนมัติทุก 300 ชิ้น</span></div>
+        <div class="counter">
+          <div class="num" id="cntNum">0</div>
+          <div class="of">จากเป้าหมาย <b id="cntTar">0</b> ชิ้น · ตรวจถัดไปที่ <b id="cntNext">300</b></div>
+          <div class="pbar" style="margin:12px 0 6px"><i id="cntBar" style="width:0%"></i></div>
+          <div class="note">Pallet ปัจจุบัน: <b id="palCur">—</b> · บรรจุ <b id="palQty">0</b>/300 ชิ้น</div>
+        </div>
+        <div class="grid g2" style="gap:9px">
+          <button class="btn gh" onclick="addCount(1)">+1 ชิ้น</button>
+          <button class="btn gh" onclick="addCount(10)">+10 ชิ้น</button>
+        </div>
+        <button class="btn gy" style="width:100%;margin-top:9px" id="btnAuto" onclick="toggleAuto()">▶ เดินเครื่องอัตโนมัติ (จำลอง)</button>
+      </div>
+
+      <div class="card">
+        <div class="card-h"><h3>ควบคุมงาน</h3></div>
+        <button class="btn gr big" id="btnStart" onclick="startJob()">🟢 เริ่มงาน (Start Job)</button>
+        <button class="btn rd big" style="margin-top:10px" id="btnFinish" onclick="finishJob()">🔴 จบงาน (Finish Job)</button>
+        <div class="hr"></div>
+        <h4 style="font-size:13px;margin-bottom:9px">แจ้งปัญหาหน้างาน</h4>
+        <button class="btn am big" onclick="openIssue('die')">🧰 ปัญหาแม่พิมพ์ (Die)</button>
+        <button class="btn pp big" style="margin-top:9px" onclick="openIssue('man')">👷 ปัญหาด้านคน (Man)</button>
+        <button class="btn gy big" style="margin-top:9px" onclick="openIssue('other')">⚠️ ปัญหาอื่น ๆ (Other)</button>
+      </div>
+
+      <div class="card">
+        <div class="card-h"><h3>สรุปกะปัจจุบันของสถานีนี้</h3></div>
+        <div class="kv" id="oprSum"></div>
+        <div class="hr"></div>
+        <button class="btn gh" style="width:100%" onclick="openQuality('manual')">📝 บันทึกคุณภาพด้วยตนเอง</button>
+        <button class="btn gh" style="width:100%;margin-top:9px" onclick="openPallet()">📦 ปิดพาเลท</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:14px">
+    <div class="card-h"><h3>🗂️ Log ประวัติการบันทึก</h3>
+      <div class="row-end"><span class="sub" id="logCnt"></span>
+        <button class="btn gy" style="padding:6px 12px;font-size:12.5px" id="btnLogAll" onclick="toggleLogAll()">👁️ ดูรวมทุกสถานี</button></div></div>
+    <div class="tw log-s"><table id="tblLog"><thead><tr><th>เวลา</th><th>สถานี</th><th class="tc">ประเภท</th><th>รายละเอียด</th><th class="tr">ชิ้นที่</th><th>ผู้บันทึก</th></tr></thead><tbody></tbody></table></div>
+  </div>
+</section>
+
+<!-- ============ ANALYTICS ============ -->
+<section id="page-ana" class="page">
+  <div class="card">
+    <div class="card-h">
+      <div><h2 style="font-size:17px">วิเคราะห์เครื่องจักรเชิงลึก &amp; AI Insights</h2>
+        <div class="sub">Pareto สาเหตุ Downtime / ของเสีย พร้อมข้อเสนอแนะอัตโนมัติ (ข้อมูลย้อนหลัง 14 วัน)</div></div>
+      <div class="row-end"><div><label class="fl">เลือกเครื่องจักร</label>
+        <select class="inp" id="anaMachine" style="min-width:220px"></select></div></div>
+    </div>
+  </div>
+  <div class="grid g4" id="anaKpi" style="margin-top:14px"></div>
+  <div class="ai-box" id="aiBox"></div>
+  <div class="grid g2" style="margin-top:14px">
+    <div class="card"><div class="card-h"><h3>Pareto สาเหตุ Downtime (นาที)</h3><span class="sub">สะสม %</span></div><div class="cbox"><canvas id="cAnaPareto"></canvas></div></div>
+    <div class="card"><div class="card-h"><h3>Pareto ของเสีย (Defect)</h3><span class="sub">ชิ้น</span></div><div class="cbox"><canvas id="cAnaDefect"></canvas></div></div>
+  </div>
+  <div class="card" style="margin-top:14px">
+    <div class="card-h"><h3>ตารางสรุปปัญหาและข้อเสนอแนะรายเครื่อง</h3></div>
+    <div class="tw"><table id="tblAnaRec"><thead><tr><th>เครื่องจักร</th><th>ปัญหาหลัก</th><th class="tr">เวลาสูญเสีย</th><th class="tc">OEE</th><th>ข้อเสนอแนะ</th><th class="tc">สถานะ</th></tr></thead><tbody></tbody></table></div>
+  </div>
+</section>
+
+<!-- ============ TRACEABILITY ============ -->
+<section id="page-trc" class="page">
+  <div class="card">
+    <div class="card-h"><div><h2 style="font-size:17px">สืบย้อนกลับผลิตภัณฑ์ (Traceability)</h2>
+      <div class="sub">ค้นด้วย Pallet No. / Lot No. / Part No. / Coil Lot</div></div></div>
+    <div class="row-end">
+      <div style="flex:1;min-width:230px"><label class="fl">คำค้นหา</label><input class="inp" id="trcQ"></div>
+      <button class="btn" onclick="runTrace()">🔎 สืบค้น</button>
+      <button class="btn gy" onclick="document.getElementById('trcQ').value='';document.getElementById('trcRes').innerHTML=emptyTrace()">ล้าง</button>
+    </div>
+    <div style="margin-top:12px"><span class="note">ตัวอย่างที่ค้นได้:</span><br><span id="trcChips"></span></div>
+  </div>
+  <div id="trcRes" style="margin-top:14px"></div>
+</section>
+
+</main>
+
+<!-- MODALS -->
+<div class="ov" id="ovLogin"><div class="mod" style="max-width:520px">
+  <div class="mod-h"><div><h3>🔐 เข้าสู่ระบบสถานี (Station Lock)</h3><p>ยืนยันตัวตนและรหัสเครื่องก่อนบันทึกข้อมูล</p></div><button class="x" onclick="closeM('ovLogin')">✕</button></div>
+  <div class="mod-b">
+    <div class="mbanner" id="lgBanner"><span style="font-size:26px">🏭</span><div><div class="mc" id="lgMc">—</div><div class="sm" id="lgLine">—</div></div></div>
+    <div class="fgrid">
+      <div><label class="fl">ผู้ปฏิบัติงาน *</label><select class="inp" id="lgUser"></select></div>
+      <div><label class="fl">รหัส PIN 4 หลัก *</label><input class="inp mono" id="lgPin" maxlength="4" inputmode="numeric" placeholder="••••"></div>
+    </div>
+    <div class="keypad">
+      <button onclick="pin('1')">1</button><button onclick="pin('2')">2</button><button onclick="pin('3')">3</button>
+      <button onclick="pin('4')">4</button><button onclick="pin('5')">5</button><button onclick="pin('6')">6</button>
+      <button onclick="pin('7')">7</button><button onclick="pin('8')">8</button><button onclick="pin('9')">9</button>
+      <button onclick="pin('C')" style="color:var(--red)">ล้าง</button><button onclick="pin('0')">0</button><button onclick="pin('B')">⌫</button>
+    </div>
+    <div class="hr"></div>
+    <label class="fl">รหัสสถานีหน้าเครื่อง *</label>
+    <div class="row-end"><input class="inp mono" id="lgCode" placeholder="เช่น ST-600T" style="flex:1;text-transform:uppercase">
+      <button class="btn gh" onclick="scanQR()">📷 สแกน QR</button></div>
+    <div class="note" id="lgHint" style="margin-top:7px">รหัสต้องตรงกับเครื่องที่เลือกเท่านั้น</div>
+  </div>
+  <div class="mod-f"><button class="btn gy" onclick="closeM('ovLogin')">ยกเลิก</button><button class="btn gr" onclick="doLogin()">🔐 ล็อกสถานี</button></div>
+</div></div>
+
+<div class="ov" id="ovIssue"><div class="mod" style="max-width:560px">
+  <div class="mod-h"><div><h3 id="isTitle">แจ้งปัญหา</h3><p>ระบบจะบันทึกเป็น Downtime อัตโนมัติ</p></div><button class="x" onclick="closeM('ovIssue')">✕</button></div>
+  <div class="mod-b">
+    <div class="mbanner" id="isBanner"><span style="font-size:26px">⚠️</span><div><div class="mc" id="isMc">—</div><div class="sm">บันทึกเข้าสถานีนี้เท่านั้น</div></div></div>
+    <div class="fgrid">
+      <div><label class="fl">เวลา</label><input class="inp" id="isTime" readonly></div>
+      <div><label class="fl">ชิ้นที่ผลิต</label><input class="inp" id="isCnt" readonly></div>
+      <div><label class="fl">ผู้แจ้ง</label><input class="inp" id="isBy" readonly></div>
+    </div>
+    <div style="margin-top:12px"><label class="fl">สาเหตุ *</label><select class="inp" id="isCause"></select></div>
+    <div style="margin-top:12px"><label class="fl">ระยะเวลาที่คาดว่าจะหยุด (นาที) *</label><input class="inp" id="isDur" type="number" value="15" min="1"></div>
+    <div style="margin-top:12px"><label class="fl">การแก้ไขเบื้องต้น / หมายเหตุ</label><textarea class="inp" id="isNote" rows="3"></textarea></div>
+    <div style="margin-top:12px"><label class="fl">แจ้งต่อ</label><select class="inp" id="isTo"><option>หัวหน้างาน (Leader)</option><option>ฝ่ายซ่อมบำรุง (Maintenance)</option><option>ฝ่ายคุณภาพ (QA)</option><option>ฝ่ายวางแผน (PC)</option></select></div>
+    <div class="confirm-box"><input type="checkbox" id="isChk" onchange="document.getElementById('isSave').disabled=!this.checked">
+      <label for="isChk" id="isChkL">ยืนยันว่าปัญหานี้เกิดที่เครื่องนี้</label></div>
+  </div>
+  <div class="mod-f"><button class="btn gy" onclick="closeM('ovIssue')">ยกเลิก</button><button class="btn rd" id="isSave" onclick="saveIssue()" disabled>บันทึกปัญหา</button></div>
+</div></div>
+
+<div class="ov" id="ovQ"><div class="mod">
+  <div class="mod-h"><div><h3 id="qTitle">บันทึกคุณภาพ</h3><p id="qSub">ค่าจากเครื่องถูกดึงอัตโนมัติ</p></div><button class="x" onclick="closeM('ovQ')">✕</button></div>
+  <div class="mod-b">
+    <div class="mbanner" id="qBanner"><span style="font-size:26px">🔍</span><div><div class="mc" id="qMc">—</div><div class="sm" id="qMcSub">—</div></div></div>
+    <div class="fgrid">
+      <div><label class="fl">จุดตรวจ</label><input class="inp" id="qPoint" readonly></div>
+      <div><label class="fl">เวลา</label><input class="inp" id="qTime" readonly></div>
+      <div><label class="fl">ชิ้นที่</label><input class="inp" id="qAt" readonly></div>
+      <div><label class="fl">Lot No.</label><input class="inp" id="qLot" readonly></div>
+    </div>
+    <div class="hr"></div>
+    <div class="fgrid">
+      <div><label class="fl" id="lbTh">Thickness (mm)</label><input class="inp" id="qTh" oninput="qSpec()"></div>
+      <div><label class="fl" id="lbPi">Pitch (mm)</label><input class="inp" id="qPi" oninput="qSpec()"></div>
+      <div><label class="fl" id="lbDh">Die Height (mm)</label><input class="inp" id="qDh" oninput="qSpec()"></div>
+      <div><label class="fl">SPM</label><input class="inp" id="qSpm"></div>
+    </div>
+    <div id="qSpecMsg" class="note" style="margin-top:8px"></div>
+    <div class="hr"></div>
+    <div class="fgrid">
+      <div><label class="fl">ผลตรวจ *</label><select class="inp" id="qJudge" onchange="qJudgeChange()"><option value="OK">OK — ผ่าน</option><option value="NG">NG — ไม่ผ่าน</option></select></div>
+      <div><label class="fl">จำนวนของเสีย</label><input class="inp" id="qNgQty" type="number" value="0" min="0"></div>
+      <div id="qDefWrap" style="display:none"><label class="fl">ประเภทของเสีย</label><select class="inp" id="qDefType"></select></div>
+      <div><label class="fl">ผู้ตรวจ</label><input class="inp" id="qBy" readonly></div>
+    </div>
+    <div class="hr"></div>
+    <div class="fgrid">
+      <div><label class="fl">Pallet No.</label><input class="inp" id="qPal"></div>
+      <div><label class="fl">จำนวนในพาเลท</label><input class="inp" id="qPalQty" type="number" value="300"></div>
+    </div>
+    <div class="confirm-box"><input type="checkbox" id="qChk" onchange="document.getElementById('qSave').disabled=!this.checked">
+      <label for="qChk" id="qChkL">ยืนยันว่าข้อมูลชุดนี้เป็นของเครื่องนี้</label></div>
+  </div>
+  <div class="mod-f"><button class="btn gy" onclick="closeM('ovQ')">ปิด</button><button class="btn gr" id="qSave" onclick="saveQuality()" disabled>✔ ยืนยันบันทึก</button></div>
+</div></div>
+
+<div class="ov" id="ovPal"><div class="mod" style="max-width:500px">
+  <div class="mod-h"><div><h3>ปิดพาเลท</h3><p id="pSub">—</p></div><button class="x" onclick="closeM('ovPal')">✕</button></div>
+  <div class="mod-b">
+    <div class="mbanner" id="pBanner"><span style="font-size:26px">📦</span><div><div class="mc" id="pMc">—</div></div></div>
+    <div class="fgrid">
+      <div><label class="fl">Pallet No.</label><input class="inp" id="pNo"></div>
+      <div><label class="fl">จำนวนบรรจุ (ชิ้น)</label><input class="inp" id="pQty" type="number" value="300"></div>
+      <div><label class="fl">Lot No.</label><input class="inp" id="pLot" readonly></div>
+      <div><label class="fl">ตำแหน่งจัดเก็บ</label><select class="inp" id="pLoc"><option>WH-A ชั้น 1</option><option>WH-A ชั้น 2</option><option>WH-B ชั้น 1</option><option>พื้นที่รอตรวจ QA</option></select></div>
+    </div>
+  </div>
+  <div class="mod-f"><button class="btn gy" onclick="closeM('ovPal')">ยกเลิก</button><button class="btn" onclick="savePallet()">บันทึกพาเลท</button></div>
+</div></div>
+
+<script>
+/* ===== UTIL ===== */
+const $=id=>document.getElementById(id);
+function mul(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const R=mul(20250617);
+const ri=(a,b)=>Math.floor(R()*(b-a+1))+a, rf=(a,b,d=2)=>+(a+R()*(b-a)).toFixed(d), pick=a=>a[Math.floor(R()*a.length)];
+const nf=n=>Number(n).toLocaleString('th-TH'), pad=n=>String(n).padStart(2,'0');
+const iso=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const ymd=d=>String(d.getFullYear()%100)+pad(d.getMonth()+1)+pad(d.getDate());
+const THM=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+const thD=d=>d.getDate()+' '+THM[d.getMonth()]+' '+((d.getFullYear()+543)%100);
+const thFull=d=>d.getDate()+' '+THM[d.getMonth()].replace('.','')+' '+(d.getFullYear()+543);
+const hhmm=d=>pad(d.getHours())+':'+pad(d.getMinutes());
+const now=()=>{const d=new Date();return pad(d.getHours())+':'+pad(d.getMinutes())+':'+pad(d.getSeconds())};
+const hm=m=>pad(Math.floor(m/60)%24)+':'+pad(m%60);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const sum=(a,k)=>a.reduce((x,y)=>x+y[k],0), avg=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:0;
+function toast(m){const d=document.createElement('div');d.style.cssText='position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:#1e293b;color:#f8fafc;padding:12px 20px;border-radius:11px;z-index:300;font-weight:600;font-size:13.5px;border:1px solid #334155;max-width:90vw;text-align:center';d.textContent=m;document.body.appendChild(d);setTimeout(()=>d.remove(),2600)}
+function openM(id){$(id).classList.add('on')} function closeM(id){$(id).classList.remove('on')}
+function kpi(l,v,u,cls,df,dc){return `<div class="kpi ${cls||''}"><div class="lb">${l}</div><div class="vl">${v}<span class="un">${u||''}</span></div>${df?`<div class="df ${dc||''}">${df}</div>`:''}</div>`}
+
+// สร้างไอคอน/รูปชิ้นงานแบบ SVG ตามรูปทรงของชื่อชิ้นงาน (ไม่มีไฟล์ภาพจริง จึงสร้างภาพประกอบแทน)
+function partIconSVG(partName,color){
+  const n=(partName||'').toUpperCase();
+  let shape;
+  if(n.includes('PANEL')||n.includes('DOOR')||n.includes('HOOD')){
+    shape=`<rect x="14" y="18" width="92" height="44" rx="6" fill="none" stroke="${color}" stroke-width="3"/>
+      <path d="M14 30 Q60 18 106 30" fill="none" stroke="${color}" stroke-width="2" opacity=".6"/>
+      <circle cx="26" cy="50" r="2.4" fill="${color}"/><circle cx="94" cy="50" r="2.4" fill="${color}"/>`;
+  }else if(n.includes('BRACKET')||n.includes('MTG')||n.includes('MOUNT')){
+    shape=`<path d="M20 60 L20 26 L52 26 L52 36 L30 36 L30 60 Z" fill="none" stroke="${color}" stroke-width="3" stroke-linejoin="round"/>
+      <circle cx="26" cy="32" r="2.6" fill="${color}"/><circle cx="26" cy="52" r="2.6" fill="${color}"/>
+      <path d="M62 24 L100 24 L100 56 L62 56 Z" fill="none" stroke="${color}" stroke-width="3" opacity=".55"/>`;
+  }else if(n.includes('PILLAR')||n.includes('REINF')||n.includes('BEAM')||n.includes('RAIL')){
+    shape=`<path d="M46 14 L74 14 L80 66 L40 66 Z" fill="none" stroke="${color}" stroke-width="3" stroke-linejoin="round"/>
+      <line x1="50" y1="26" x2="70" y2="26" stroke="${color}" stroke-width="2" opacity=".6"/>
+      <line x1="48" y1="40" x2="72" y2="40" stroke="${color}" stroke-width="2" opacity=".6"/>
+      <line x1="46" y1="54" x2="74" y2="54" stroke="${color}" stroke-width="2" opacity=".6"/>`;
+  }else{
+    shape=`<rect x="22" y="22" width="76" height="36" rx="8" fill="none" stroke="${color}" stroke-width="3"/>
+      <circle cx="60" cy="40" r="9" fill="none" stroke="${color}" stroke-width="2.5"/>`;
+  }
+  return `<svg viewBox="0 0 120 80" style="width:100%;height:84px;display:block">
+    <rect x="1" y="1" width="118" height="78" rx="10" fill="rgba(255,255,255,.03)" stroke="${color}22"/>${shape}</svg>`;
+}
+
+/* ===== MASTER DATA ===== */
+const LINES=[
+ {id:'600',name:'ไลน์ 600 ตัน',mc:'PRESS-600T',cap:55,color:'#10b981',code:'ST-600T',proc:'Blanking'},
+ {id:'800',name:'ไลน์ 800 ตัน',mc:'PRESS-800T',cap:48,color:'#06b6d4',code:'ST-800T',proc:'Progressive'},
+ {id:'1000',name:'ไลน์ 1000 ตัน',mc:'PRESS-1000T',cap:42,color:'#3b82f6',code:'ST-1000T',proc:'Stamping'},
+ {id:'1500',name:'ไลน์ 1500 ตัน',mc:'PRESS-1500T',cap:35,color:'#8b5cf6',code:'ST-1500T',proc:'Stamping'},
+ {id:'2500',name:'ไลน์ 2500 ตัน',mc:'PRESS-2500T',cap:24,color:'#f59e0b',code:'ST-2500T',proc:'Stamping'}];
+const LN=id=>LINES.find(L=>L.id===id);
+const PARTS=[
+ {no:'BK-1001-X',name:'Master Blank Sheet 1.2t',mat:'SPCC 1.2t',line:'600',die:'DIE-BK01',th:1.20,pi:120.0,cw:350,dh:250.0},
+ {no:'BK-1072-H',name:'Blank Washer Plate',mat:'SPCC 1.0t',line:'600',die:'DIE-H0208',th:1.00,pi:96.0,cw:280,dh:262.0},
+ {no:'PR-3390-D',name:'Progressive Clip Holder',mat:'SPHC 1.6t',line:'800',die:'DIE-P415',th:1.60,pi:35.0,cw:240,dh:280.0},
+ {no:'PR-4402-K',name:'Stay Bracket Fuel Tank',mat:'SAPH370 1.8t',line:'800',die:'DIE-K0733',th:1.80,pi:28.5,cw:225,dh:305.0},
+ {no:'ST-7802-B',name:'Reinforce Rear Floor',mat:'SPCC 1.2t',line:'1000',die:'DIE-B0871',th:1.20,pi:24.0,cw:0,dh:320.0},
+ {no:'ST-6633-F',name:'Hinge Reinforcement',mat:'SPFH590 1.4t',line:'1000',die:'DIE-F0922',th:1.40,pi:26.0,cw:0,dh:312.0},
+ {no:'ST-4501-A',name:'Bracket Front Suspension',mat:'SPHC 2.3t',line:'1500',die:'DIE-A1203',th:2.30,pi:38.0,cw:0,dh:318.5},
+ {no:'ST-5120-E',name:'Cross Member Stiffener',mat:'SAPH440 2.1t',line:'1500',die:'DIE-E1130',th:2.10,pi:44.0,cw:0,dh:325.0},
+ {no:'ST-2210-C',name:'Panel Side Inner',mat:'SPCE 0.8t',line:'2500',die:'DIE-C2044',th:0.80,pi:52.0,cw:0,dh:295.0},
+ {no:'ST-8841-G',name:'Seat Rail Bracket',mat:'SPHC 2.6t',line:'2500',die:'DIE-G3301',th:2.60,pi:60.0,cw:0,dh:300.5}];
+const TOL={th:.05,pi:.10,dh:.30};
+const SUPPLIERS=['สยามสตีล จำกัด','NS Metal (Thailand)','POSCO-Thainox','Nippon Steel Trading','ไทยเมทัลชีท'];
+const DT_REASON={die:['เปลี่ยนแม่พิมพ์ (Die Change)','Punch แตก/บิ่น','เศษโลหะติดในแม่พิมพ์','Die Height คลาดเคลื่อน','Stripper ติดขัด'],
+ man:['รอผู้ปฏิบัติงาน','พักตามเวลา','เปลี่ยนกะ/ส่งงาน','อบรม/ประชุมด่วน'],
+ other:['รอวัตถุดิบ (Coil)','รอรถโฟล์คลิฟท์','QA ตรวจสอบระหว่างผลิต','เซ็นเซอร์ขัดข้อง','ไฟฟ้าขัดข้อง','รอพาเลทเปล่า']};
+const ALL_DT=[...DT_REASON.die.map(r=>[r,'แม่พิมพ์']),...DT_REASON.man.map(r=>[r,'คน']),...DT_REASON.other.map(r=>[r,'อื่นๆ'])];
+const ACTIONS=['แจ้งช่างซ่อมบำรุงเข้าแก้ไข','ปรับตั้งค่าใหม่และทดลองเดินเครื่อง','เปลี่ยนอะไหล่สำรอง','ประสานฝ่ายวางแผนจัดส่งวัตถุดิบ','ทำความสะอาดแม่พิมพ์'];
+const DEFECTS=['ครีบ (Burr)','รอยขีดข่วน (Scratch)','รอยยับ (Wrinkle)','แตกร้าว (Crack)','ขนาดไม่ได้ (Dimension NG)','รอยบุบ (Dent)'];
+const OPRS=['สมชาย ใจดี (EMP-10245)','วิชัย พูนสุข (EMP-10388)','ณัฐพล แก้วมณี (EMP-10512)','อารีย์ ศรีสุข (EMP-10677)','ธีรพงษ์ สายทอง (EMP-10731)'];
+const QCS=['สุดารัตน์ ทองดี (QC-204)','ประเสริฐ มั่นคง (QC-118)','กมลวรรณ บุญมา (QC-331)'];
+const LEADERS=['อนันต์ วงศ์สกุล (LD-01)','ปรีชา ธนากร (LD-02)','สุเมธ ชัยวัฒน์ (LD-03)'];
+const CUSTOMERS=['Toyota Gateway Plant','Honda Prachinburi','Isuzu Samrong','Mitsubishi Laem Chabang','Nissan Bangna'];
+const STAFF={'600':OPRS[0],'800':OPRS[1],'1000':OPRS[2],'1500':OPRS[3],'2500':OPRS[4]};
+
+/* ===== GENERATE MOCK DATA (14 วัน × 5 เครื่อง × 2 กะ) ===== */
+const TODAY=new Date();TODAY.setHours(0,0,0,0);
+const COILS=[];
+for(let i=0;i<40;i++){const p=PARTS[i%PARTS.length];const d=new Date(TODAY);d.setDate(d.getDate()-ri(1,40));
+ COILS.push({lot:'CL-SS'+(2403+(i%4))+'-'+String(100+i*7).padStart(4,'0'),mat:p.mat,th:p.th,width:ri(120,420),
+ weight:ri(3500,9800),supplier:pick(SUPPLIERS),heat:'H'+ri(20000,99999),recv:iso(d),cert:'MTC-'+ri(100000,999999),
+ hard:ri(95,140)+' HV',ts:ri(290,520)+' MPa',el:rf(22,38,1)+' %',insp:R()>.08?'ผ่าน':'ผ่านแบบมีเงื่อนไข'})}
+
+const RECORDS=[];
+for(let d=13;d>=0;d--){
+  const dt=new Date(TODAY);dt.setDate(dt.getDate()-d);const ds=iso(dt);
+  LINES.forEach((L,li)=>{
+    ['กะ A','กะ B'].forEach((sh,si)=>{
+      if(d===0&&si===1)return;
+      const cands=PARTS.filter(p=>p.line===L.id);const p=cands[(d+si)%cands.length];
+      const plan=Math.round(L.cap*60*11/100)*100;
+      // downtime
+      const dts=[];let cur=(si?20*60:8*60)+ri(25,70);const n=ri(1,3);
+      for(let i=0;i<n;i++){const[r2,t2]=ALL_DT[ri(0,ALL_DT.length-1)];const min=ri(8,48);
+        dts.push({start:cur,end:cur+min,min,type:t2,reason:r2,by:STAFF[L.id].split(' (')[0],action:pick(ACTIONS)});
+        cur+=min+ri(70,180);if(cur>(si?31*60:19*60))break;}
+      const dtMin=dts.reduce((a,b)=>a+b.min,0), runMin=660-dtMin;
+      let actual=Math.round(runMin*L.cap*rf(.86,1.0,3));
+      if(d===0){const h=Math.max(1,Math.min(11,new Date().getHours()-8));actual=Math.round(actual*(h/11));}
+      actual=Math.max(300,actual);
+      const ng=Math.max(4,Math.round(actual*rf(.005,.022,4))), ok=actual-ng;
+      const avail=runMin/660*100, perf=Math.min(100,actual/(runMin*L.cap)*100), qual=ok/actual*100;
+      const oee=avail*perf*qual/1e4;
+      // defects
+      const defs={};let rem=ng;const dn=ri(2,4),dsel=[...DEFECTS].sort(()=>R()-.5).slice(0,dn);
+      dsel.forEach((x,i)=>{const v=i===dn-1?rem:Math.round(rem*rf(.25,.5,2));defs[x]=Math.max(0,v);rem-=v});
+      // pallets
+      const pals=[],pc=Math.floor(ok/300);
+      for(let i=1;i<=pc;i++){const sd=new Date(dt);sd.setDate(sd.getDate()+ri(1,3));
+        pals.push({no:'PLT-'+ymd(dt)+'-'+L.id+'-'+pad(i),qty:300,loc:pick(['WH-A ชั้น 1','WH-A ชั้น 2','WH-B ชั้น 1']),
+          cust:pick(CUSTOMERS),ship:d>2?iso(sd):'-',inv:d>2?'INV-'+ri(70000,79999):'รอจัดส่ง',
+          truck:d>2?'ทะเบียน '+ri(70,89)+'-'+ri(1000,9999)+' ชลบุรี':'-'})}
+      // quality records
+      const qrs=[],pts=[['เริ่มงาน (First Article)',0]];
+      for(let c=300;c<=actual;c+=300)pts.push(['ระหว่างผลิต (In-Process)',c]);
+      if(d>0)pts.push(['จบงาน (Last Article)',actual]);
+      pts.slice(0,26).forEach(pt=>{const bad=R()<.07,mn=(si?20*60:8*60)+Math.round(pt[1]/L.cap)+ri(2,9);
+        qrs.push({time:hm(mn),point:pt[0],at:pt[1],th:+(p.th+rf(-.04,.04,3)).toFixed(3),pi:+(p.pi+rf(-.08,.08,3)).toFixed(3),
+          dh:+(p.dh+rf(-.25,.25,2)).toFixed(2),spm:ri(L.cap-4,L.cap+2),judge:bad?'NG':'OK',def:bad?pick(DEFECTS):'-',
+          ngq:bad?ri(1,8):0,pal:pals[Math.floor(pt[1]/300)-1]?pals[Math.floor(pt[1]/300)-1].no:'-',by:pick(QCS)})});
+      RECORDS.push({date:ds,dateObj:new Date(dt),line:L.id,lineName:L.name,mc:L.mc,proc:L.proc,shift:sh,
+        part:p.no,partName:p.name,mat:p.mat,die:p.die,lot:'LOT-'+ymd(dt)+'-'+L.id+'-'+(si?'B':'A'),
+        coil:COILS[(d*5+li)%COILS.length].lot,plan,actual,ok,ng,ngRate:ng/actual*100,
+        dt:dts,dtMin,runMin,avail,perf,qual,oee,defs,pallets:pals,qrs,
+        opr:STAFF[L.id],leader:LEADERS[li%3],qc:pick(QCS)});
+    })})}
+const TD=iso(TODAY);
+const todayRecs=()=>RECORDS.filter(r=>r.date===TD);
+const todayRec=id=>RECORDS.filter(r=>r.line===id&&r.date===TD)[0];
+
+/* ===== STATION STATE (ล็อกไว้พร้อมข้อมูลจริง) ===== */
+const ST={};
+LINES.forEach((L,i)=>{
+  const r=todayRec(L.id), p=PARTS.find(x=>x.no===r.part);
+  const st={id:L.id,name:L.name,mc:L.mc,cap:L.cap,color:L.color,code:L.code,proc:L.proc,
+    locked:true,user:STAFF[L.id],lastAct:Date.now(),run:true,started:true,alarm:false,almCode:'',pendingQ:null,auto:null,
+    count:r.actual,pal:r.pallets.length+1,palQty:r.actual%300,part:r.part,shift:'กะ A (08:00-20:00)',target:r.plan,
+    spm:L.cap-ri(1,3),th:p.th,pi:p.pi,cw:p.cw,dh:p.dh,ld:ri(68,90),ot:44+i*2,
+    log:[],qrs:r.qrs.slice(0,8).map(q=>({...q})),dts:r.dt.map(x=>({...x}))};
+  // seed log
+  st.log.push({t:'08:02:11',st:L.mc,color:L.color,type:'LOGIN',detail:'เข้าสู่ระบบสถานี '+L.mc+' (ยืนยันรหัส '+L.code+') โดย '+st.user,at:0,by:st.user,cls:'b-b'});
+  st.log.push({t:'08:05:40',st:L.mc,color:L.color,type:'START',detail:'เริ่มงาน Lot '+r.lot+' / แม่พิมพ์ '+r.die,at:0,by:st.user,cls:'b-b'});
+  r.qrs.slice(0,4).forEach(q=>st.log.push({t:q.time+':05',st:L.mc,color:L.color,type:'คุณภาพ',
+    detail:q.point+' · Thk '+q.th+' / Pitch '+q.pi+' / DieH '+q.dh+' · ผล '+q.judge+(q.judge==='NG'?' ('+q.def+' '+q.ngq+' ชิ้น)':''),
+    at:q.at,by:q.by,cls:q.judge==='OK'?'b-g':'b-r'}));
+  r.dt.forEach(d2=>st.log.push({t:hm(d2.start)+':00',st:L.mc,color:L.color,type:'ปัญหา',
+    detail:'['+d2.type+'] '+d2.reason+' · หยุด '+d2.min+' นาที · '+d2.action,at:Math.round(d2.start/2),by:st.user,cls:d2.type==='แม่พิมพ์'?'b-a':d2.type==='คน'?'b-p':'b-r'}));
+  r.pallets.slice(0,3).forEach((pl,k)=>st.log.push({t:hm(9*60+k*95)+':20',st:L.mc,color:L.color,type:'พาเลท',
+    detail:'ปิดพาเลท '+pl.no+' จำนวน '+pl.qty+' ชิ้น · จัดเก็บ '+pl.loc,at:(k+1)*300,by:st.user,cls:'b-b'}));
+  st.log.sort((a,b)=>b.t.localeCompare(a.t));
+  ST[L.id]=st;
+});
+ST['1000'].run=false;ST['1000'].started=true;                 // SETUP
+ST['2500'].alarm=true;ST['2500'].run=false;ST['2500'].almCode='AL-204 : Overload Detected — แรงกดเกินพิกัด';
+ST['2500'].log.unshift({t:'13:48:22',st:'PRESS-2500T',color:'#f59e0b',type:'ALARM',detail:'AL-204 : Overload Detected — แรงกดเกินพิกัด',at:ST['2500'].count,by:'ระบบ PLC',cls:'b-r'});
+let CUR='600',LOGALL=false;
+const CS=()=>ST[CUR];
+const stPart=s=>PARTS.find(p=>p.no===s.part)||PARTS[0];
+const stLot=s=>'LOT-'+ymd(new Date())+'-'+s.id+'-'+(s.shift.startsWith('กะ A')?'A':'B');
+const stPal=s=>'PLT-'+ymd(new Date())+'-'+s.id+'-'+pad(s.pal);
+const stCoil=s=>todayRec(s.id).coil;
+function stStatus(s){
+  if(s.alarm)return['b-r','ALARM','alm'];
+  if(s.run)return['b-g','เดินเครื่อง (RUN)','run'];
+  if(s.started)return['b-a','ปรับตั้ง (SETUP)','set'];
+  if(s.locked)return['b-b','พร้อมเริ่มงาน (READY)','stop'];
+  return['b-n','หยุดเครื่อง (STOP)','stop'];
+}
+
+/* ===== CHART HELPERS ===== */
+const CH={};
+Chart.defaults.font.family='"Noto Sans Thai","Sarabun",sans-serif';Chart.defaults.font.size=11.5;Chart.defaults.color='#7b8694';
+function mk(id,cfg){if(CH[id])CH[id].destroy();const el=$(id);if(!el)return;CH[id]=new Chart(el,cfg)}
+const G={grid:{color:'#e3e8ef'},border:{display:false}};
+const baseOpt={responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{boxWidth:11,usePointStyle:true,pointStyle:'rectRounded',color:'#334155'}}},scales:{x:G,y:{...G,beginAtZero:true}}};
+const centerTxt={id:'ct',afterDraw(c,a,o){const{ctx,chartArea}=c;if(!chartArea)return;const x=(chartArea.left+chartArea.right)/2,y=chartArea.bottom-6;
+ ctx.save();ctx.textAlign='center';ctx.fillStyle=o.color||'#f8fafc';ctx.font='800 23px sans-serif';ctx.fillText(o.main||'',x,y);
+ ctx.fillStyle='#94a3b8';ctx.font='600 11px sans-serif';ctx.fillText(o.sub||'',x,y+16);ctx.restore()}};
+function gauge(id,v,label){const c=v>=85?'#10b981':v>=70?'#f59e0b':'#ef4444';
+ mk(id,{type:'doughnut',plugins:[centerTxt],data:{datasets:[{data:[v,100-v],backgroundColor:[c,'#e3e8ef'],borderWidth:0,circumference:180,rotation:270}]},
+ options:{responsive:true,maintainAspectRatio:false,cutout:'74%',plugins:{legend:{display:false},tooltip:{enabled:false},ct:{main:v.toFixed(1)+'%',sub:label,color:c}}}})}
+
+/* ===== NAV ===== */
+let activeSub='exec';
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));b.classList.add('active');
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  $('page-'+b.dataset.page).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});
+  if(b.dataset.page==='dash'){activeSub==='exec'?renderExec():renderLineView()}
+  if(b.dataset.page==='sup')runFilter();
+  if(b.dataset.page==='opr')renderOpr();
+  if(b.dataset.page==='ana')renderAnalytics();
+});
+document.querySelectorAll('.subtab').forEach(b=>b.onclick=()=>{
+  const grp=b.dataset.sub?'sub':'supsub';
+  document.querySelectorAll('.subtab').forEach(x=>{if((x.dataset.sub?'sub':'supsub')===grp)x.classList.remove('active')});
+  b.classList.add('active');
+  if(b.dataset.sub){activeSub=b.dataset.sub;$('sub-exec').style.display=activeSub==='exec'?'':'none';
+    $('sub-line').style.display=activeSub==='line'?'':'none';activeSub==='exec'?renderExec():renderLineView()}
+  if(b.dataset.supsub){const v=b.dataset.supsub;$('sup-filter').style.display=v==='filter'?'':'none';
+    $('sup-report').style.display=v==='report'?'':'none';$('sup-detail').style.display=v==='detail'?'':'none';
+    if(v==='report')renderShiftReport();else if(v==='detail')renderExecDetail();else runFilter()}
+});
+
+/* ===== DASHBOARD : EXEC ===== */
+function rangeRecs(){
+  const el=$('execRange');
+  const v=el?el.value:'14';
+  if(v==='today')return todayRecs();
+  const n=+v||14,lim=new Date(TODAY);lim.setDate(lim.getDate()-(n-1));
+  return RECORDS.filter(r=>r.dateObj>=lim);
+}
+const _er=$('execRange'); if(_er)_er.onchange=renderExec;
+
+function pressIconSVG(color,run){
+  return `<svg viewBox="0 0 40 40" style="width:30px;height:30px;flex-shrink:0">
+    <rect x="6" y="3" width="28" height="6" rx="1.5" fill="${color}"/>
+    <rect x="17" y="9" width="6" height="${run?10:14}" fill="${color}" opacity=".85">
+      ${run?'<animate attributeName="height" values="10;15;10" dur="1.1s" repeatCount="indefinite"/><animate attributeName="y" values="9;9;9" dur="1.1s" repeatCount="indefinite"/>':''}
+    </rect>
+    <rect x="4" y="30" width="32" height="7" rx="1.5" fill="${color}" opacity=".9"/>
+    <rect x="9" y="26" width="22" height="5" fill="${color}" opacity=".5"/>
+    <rect x="8" y="9" width="3" height="21" fill="${color}" opacity=".4"/><rect x="29" y="9" width="3" height="21" fill="${color}" opacity=".4"/>
+  </svg>`;
+}
+function renderMcCards(){
+  $('mcStatusGrid').innerHTML=LINES.map(L=>{
+    const s=ST[L.id],r=todayRec(L.id),st=stStatus(s);
+    const prog=Math.min(100,s.count/s.target*100||0);
+    const dtm=s.dts.reduce((a,b)=>a+b.min,0);
+    const stCls = s.alarm?'alm':(!s.run&&s.started===false&&!s.locked)?'stop':(st[2]==='set'||(s.started&&!s.run&&!s.alarm))?'set':'run';
+    const stTxt = s.alarm?'ALARM':(stCls==='set'?'SETUP':(stCls==='stop'?'STOP':'RUN'));
+    const oeeColor = r.oee>=85?'#16a34a':r.oee>=70?'#d97706':'#dc2626';
+    const barColor = prog>=95?'#16a34a':prog>=85?'#f59e0b':'#dc2626';
+    return `<div class="mcard" style="border-top-color:${L.color}">
+      <div class="top">
+        <div class="gfx">⚙️</div>
+        <div style="min-width:0"><div class="nm" style="color:${L.color}">${L.mc}</div>
+        <div class="sb">${L.name} · ${L.proc}</div></div>
+        <span class="st ${stCls}" style="margin-left:auto">${stTxt}</span>
+      </div>
+      <div class="big">${nf(s.count)} <small>/ ${nf(s.target)} pcs</small></div>
+      <div class="pbar"><i style="width:${prog}%;background:${barColor}"></i></div>
+      <div class="m3">
+        <div><div class="k">SPM</div><div class="v">${s.run?s.spm:0}</div></div>
+        <div><div class="k">OEE</div><div class="v" style="color:${oeeColor}">${r.oee.toFixed(1)}%</div></div>
+        <div><div class="k">DOWNTIME</div><div class="v" style="color:${dtm>45?'#dc2626':'#334155'}">${dtm}<span style="font-size:9px">m</span></div></div>
+      </div>
+      <div class="ft"><span class="mono">${r.part||'-'}</span><span>👤 ${esc((s.user||r.opr||'—').split(' ')[0])}</span></div>
+    </div>`;
+  }).join('');
+}
+
+function renderExec(){
+  const recs=rangeRecs();
+  const plan=sum(recs,'plan'),act=sum(recs,'actual'),ok=sum(recs,'ok'),ng=sum(recs,'ng'),dtm=sum(recs,'dtMin');
+  const ach=plan?act/plan*100:0,dr=act?ng/act*100:0;
+  const av=avg(recs.map(r=>r.avail)),pf=avg(recs.map(r=>r.perf)),ql=avg(recs.map(r=>r.qual)),oee=av*pf*ql/1e4;
+  const rng=$('execRange');
+  const rngLabel=rng&&rng.value==='today'?'วันนี้':rng&&rng.value==='7'?'7 วันล่าสุด':'14 วันล่าสุด';
+  if($('execDate'))$('execDate').textContent='ข้อมูลจำลอง '+rngLabel+' · '+recs.length+' บันทึก · 5 เครื่อง · 2 กะ';
+
+  renderMcCards();
+
+  // Production by Line table (Dashboard style)
+  let tp=0,ta=0,tg=0,tn=0;
+  $('tblLine').querySelector('tbody').innerHTML=LINES.map(L=>{
+    const rs=recs.filter(r=>r.line===L.id); if(!rs.length) return '';
+    const p=sum(rs,'plan'),a=sum(rs,'actual'),o=sum(rs,'ok'),n=sum(rs,'ng');
+    const ac=p?a/p*100:0, nr=a?n/a*100:0, oe=avg(rs.map(r=>r.oee));
+    const st=stStatus(ST[L.id]);
+    const stCls = ST[L.id].alarm?'alm':(st[2]==='set'?'set':(ST[L.id].run?'run':'stop'));
+    const stTxt = ST[L.id].alarm?'ALARM':(stCls==='set'?'SETUP':(stCls==='run'?'RUN':'STOP'));
+    tp+=p; ta+=a; tg+=o; tn+=n;
+    return `<tr>
+      <td><b style="color:${L.color}">${L.mc}</b><div class="note">${L.name} · ${L.proc}</div></td>
+      <td class="tc"><span class="st ${stCls}">${stTxt}</span></td>
+      <td class="mono">${rs[rs.length-1].part}</td>
+      <td class="tr">${nf(p)}</td>
+      <td class="tr"><b>${nf(a)}</b></td>
+      <td class="tc"><div style="display:flex;align-items:center;gap:5px">
+        <div class="pbar" style="flex:1;min-width:38px"><i style="width:${Math.min(100,ac)}%;background:${L.color}"></i></div>
+        <b>${ac.toFixed(0)}%</b></div></td>
+      <td class="tr" style="color:#15803d">${nf(o)}</td>
+      <td class="tr" style="color:#dc2626">${nf(n)}</td>
+      <td class="tc"><span class="bg ${nr<=1?'b-g':nr<=2?'b-a':'b-r'}">${nr.toFixed(2)}%</span></td>
+      <td class="tc"><b>${oe.toFixed(1)}%</b></td>
+    </tr>`;
+  }).join('');
+
+  if($('tblLine').querySelector('tfoot')){
+    $('tblLine').querySelector('tfoot').innerHTML=`<tr>
+      <td colspan="3">รวมทุกไลน์ (TOTAL)</td>
+      <td class="tr">${nf(tp)}</td><td class="tr">${nf(ta)}</td>
+      <td class="tc">${tp?(ta/tp*100).toFixed(0):0}%</td>
+      <td class="tr" style="color:#15803d">${nf(tg)}</td>
+      <td class="tr" style="color:#dc2626">${nf(tn)}</td>
+      <td class="tc">${ta?(tn/ta*100).toFixed(2):0}%</td>
+      <td class="tc">${(LINES.reduce((s,L)=>{const rs=recs.filter(r=>r.line===L.id);return s+(rs.length?avg(rs.map(r=>r.oee)):0)},0)/5).toFixed(1)}%</td>
+    </tr>`;
+  }
+
+  // KPI boxes (4 cards like Dashboard)
+  const unplanDt = LINES.reduce((s,L)=>s+ST[L.id].dts.reduce((a,b)=>a+b.min,0),0);
+  const stopN = LINES.filter(L=>!ST[L.id].run).length;
+  $('kpiBox').innerHTML=`
+    <div class="kpi"><div class="lb">ผลิตรวมทั้งโรงงาน</div><div class="vl">${nf(ta)}<span class="un">pcs</span></div><div class="df">บรรลุแผน ${ach.toFixed(1)}%</div></div>
+    <div class="kpi ok"><div class="lb">OEE เฉลี่ย</div><div class="vl">${oee.toFixed(1)}<span class="un">%</span></div><div class="df">A ${av.toFixed(0)}% · P ${pf.toFixed(0)}% · Q ${ql.toFixed(0)}%</div></div>
+    <div class="kpi bad"><div class="lb">อัตราของเสียรวม</div><div class="vl">${dr.toFixed(2)}<span class="un">%</span></div><div class="df">NG ${nf(ng)} ชิ้น · เป้า ≤ 1.50%</div></div>
+    <div class="kpi warn"><div class="lb">Downtime รวม (Unplan)</div><div class="vl">${unplanDt}<span class="un">นาที</span></div><div class="df">เครื่องหยุด ${stopN} เครื่อง</div></div>`;
+
+  // Charts 3-6
+  const labels = LINES.map(L=>L.mc.replace('PRESS-',''));
+  const colors = LINES.map(L=>L.color);
+  const oees = LINES.map(L=>{const rs=recs.filter(r=>r.line===L.id);return rs.length?avg(rs.map(r=>r.oee)):0});
+  const avails = LINES.map(L=>{const rs=recs.filter(r=>r.line===L.id);return rs.length?avg(rs.map(r=>r.avail)):0});
+  const quals = LINES.map(L=>{const rs=recs.filter(r=>r.line===L.id);return rs.length?avg(rs.map(r=>r.qual)):0});
+  const goods = LINES.map(L=>{const rs=recs.filter(r=>r.line===L.id);return sum(rs,'ok')});
+  const ngs = LINES.map(L=>{const rs=recs.filter(r=>r.line===L.id);return sum(rs,'ng')});
+
+  mk('cOeeByMc',{type:'bar',data:{labels,datasets:[{data:oees,backgroundColor:oees.map(v=>v>=85?'#16a34a':v>=70?'#f59e0b':'#dc2626'),borderRadius:5,barPercentage:.68}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.raw.toFixed(1)+'%'}}},
+      scales:{x:{grid:{display:false},border:{display:false},ticks:{font:{size:9.5}}},y:{grid:{color:'#eef2f7'},border:{display:false},beginAtZero:true,max:100,ticks:{callback:v=>v+'%'}}}}});
+
+  mk('cAvailByMc',{type:'bar',data:{labels,datasets:[{data:avails,backgroundColor:avails.map(v=>v>=90?'#2563eb':'#f59e0b'),borderRadius:5,barPercentage:.68}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.raw.toFixed(1)+'%'}}},
+      scales:{x:{grid:{display:false},border:{display:false},ticks:{font:{size:9.5}}},y:{grid:{color:'#eef2f7'},border:{display:false},beginAtZero:true,max:100,ticks:{callback:v=>v+'%'}}}}});
+
+  mk('cQualByMc',{type:'bar',data:{labels,datasets:[{data:quals,backgroundColor:quals.map(v=>v>=99?'#0891b2':'#f59e0b'),borderRadius:5,barPercentage:.68}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.raw.toFixed(1)+'%'}}},
+      scales:{x:{grid:{display:false},border:{display:false},ticks:{font:{size:9.5}}},y:{grid:{color:'#eef2f7'},border:{display:false},beginAtZero:true,max:100,ticks:{callback:v=>v+'%'}}}}});
+
+  mk('cGvdByMc',{type:'bar',data:{labels,datasets:[
+    {label:'Good (OK)',data:goods,backgroundColor:'#16a34a',borderRadius:4,barPercentage:.75},
+    {label:'Defect (NG)',data:ngs,backgroundColor:'#dc2626',borderRadius:4,barPercentage:.75}]},
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'top',labels:{boxWidth:9,usePointStyle:true,pointStyle:'rectRounded',font:{size:10}}}},
+      scales:{x:{grid:{display:false},border:{display:false},ticks:{font:{size:9.5}}},y:{grid:{color:'#eef2f7'},border:{display:false},beginAtZero:true}}}});
+}
+
+function renderExecDetail(){
+  const recs=rangeRecs();
+  const act=sum(recs,'actual'),ok=sum(recs,'ok'),ng=sum(recs,'ng');
+  const av=avg(recs.map(r=>r.avail)),pf=avg(recs.map(r=>r.perf)),ql=avg(recs.map(r=>r.qual)),oee=av*pf*ql/1e4;
+
+  const d7=[];for(let i=6;i>=0;i--){const x=new Date(TODAY);x.setDate(x.getDate()-i);d7.push(x)}
+  mk('cPvA',{type:'bar',data:{labels:d7.map(x=>thD(x)),datasets:[
+    {label:'แผน (Plan)',data:d7.map(x=>sum(RECORDS.filter(r=>r.date===iso(x)),'plan')),backgroundColor:'#334155',borderRadius:5},
+    {label:'ผลิตจริง (Actual)',data:d7.map(x=>sum(RECORDS.filter(r=>r.date===iso(x)),'actual')),backgroundColor:'#3b82f6',borderRadius:5}]},options:baseOpt});
+
+  const d14=[];for(let i=13;i>=0;i--){const x=new Date(TODAY);x.setDate(x.getDate()-i);d14.push(x)}
+  mk('cTrend',{data:{labels:d14.map(x=>pad(x.getDate())+'/'+pad(x.getMonth()+1)),datasets:[
+    {type:'line',label:'ผลผลิต (ชิ้น)',data:d14.map(x=>sum(RECORDS.filter(r=>r.date===iso(x)),'actual')),borderColor:'#3b82f6',backgroundColor:'rgba(59,130,246,.12)',fill:true,tension:.35,pointRadius:3,yAxisID:'y'},
+    {type:'line',label:'% ของเสีย',data:d14.map(x=>{const rs=RECORDS.filter(r=>r.date===iso(x));const a=sum(rs,'actual');return a?+(sum(rs,'ng')/a*100).toFixed(2):0}),borderColor:'#ef4444',borderDash:[5,4],pointRadius:2,yAxisID:'y1'}]},
+    options:{...baseOpt,interaction:{mode:'index',intersect:false},scales:{x:G,y:{...G,beginAtZero:true,title:{display:true,text:'ชิ้น'}},y1:{position:'right',beginAtZero:true,grid:{display:false},border:{display:false},title:{display:true,text:'%'}}}}});
+
+  mk('cDonut',{type:'doughnut',plugins:[centerTxt],data:{labels:['ของดี','ของเสีย'],datasets:[{data:[ok,ng],backgroundColor:['#10b981','#ef4444'],borderWidth:0}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:'66%',plugins:{legend:{position:'bottom',labels:{boxWidth:10,usePointStyle:true,pointStyle:'circle',color:'#334155'}},
+      ct:{main:(ok/act*100).toFixed(1)+'%',sub:'Yield Rate',color:'#10b981'},tooltip:{callbacks:{label:c=>c.label+': '+nf(c.raw)+' ชิ้น'}}}}});
+
+  const dall={};recs.forEach(r=>Object.entries(r.defs).forEach(([k,v])=>dall[k]=(dall[k]||0)+v));
+  const de=Object.entries(dall).sort((a,b)=>b[1]-a[1]).slice(0,6);
+  const tot=de.reduce((a,b)=>a+b[1],0)||1;let c1=0;const cu=de.map(x=>{c1+=x[1];return +(c1/tot*100).toFixed(1)});
+  mk('cPareto',{data:{labels:de.map(x=>x[0].split(' (')[0]),datasets:[
+    {type:'bar',label:'ชิ้น',data:de.map(x=>x[1]),backgroundColor:'#f59e0b',borderRadius:4,yAxisID:'y'},
+    {type:'line',label:'สะสม %',data:cu,borderColor:'#ef4444',pointRadius:3,yAxisID:'y1'}]},
+    options:{...baseOpt,scales:{x:{...G,ticks:{maxRotation:40,minRotation:25,font:{size:10}}},y:{...G,beginAtZero:true},y1:{position:'right',max:100,beginAtZero:true,grid:{display:false},border:{display:false}}}}});
+
+  const dmap={};recs.forEach(r=>r.dt.forEach(x=>dmap[x.reason]=(dmap[x.reason]||0)+x.min));
+  const dd=Object.entries(dmap).sort((a,b)=>b[1]-a[1]).slice(0,7);
+  mk('cDown',{type:'bar',data:{labels:dd.map(x=>x[0].split(' (')[0]),datasets:[{label:'นาที',data:dd.map(x=>x[1]),backgroundColor:'#8b5cf6',borderRadius:4}]},
+    options:{...baseOpt,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{...G,beginAtZero:true},y:{grid:{display:false},border:{display:false},ticks:{font:{size:10}}}}}});
+
+  gauge('gOEE',oee,'OEE รวม');gauge('gA',av,'Availability');gauge('gP',pf,'Performance');gauge('gQ',ql,'Quality');
+
+  const ct=LINES.map(L=>{const rs=recs.filter(r=>r.line===L.id);const a=sum(rs,'actual')||1,rm=sum(rs,'runMin')||1;
+    return{n:L.mc,ct:+(rm*60/a).toFixed(2),pr:Math.round(a/(rm/60))}});
+  mk('cCycle',{data:{labels:ct.map(x=>x.n),datasets:[
+    {type:'bar',label:'Cycle Time (วิ/ชิ้น)',data:ct.map(x=>x.ct),backgroundColor:LINES.map(L=>L.color),borderRadius:5,yAxisID:'y'},
+    {type:'line',label:'Productivity (ชิ้น/ชม.)',data:ct.map(x=>x.pr),borderColor:'#3b82f6',pointRadius:4,tension:.3,yAxisID:'y1'}]},
+    options:{...baseOpt,scales:{x:G,y:{...G,beginAtZero:true,title:{display:true,text:'วิ/ชิ้น'}},y1:{position:'right',beginAtZero:true,grid:{display:false},border:{display:false},title:{display:true,text:'ชิ้น/ชม.'}}}}});
+
+  const en=LINES.map(L=>{const rs=recs.filter(r=>r.line===L.id),a=sum(rs,'actual')||1;
+    const kwh=Math.round(sum(rs,'runMin')/60*(+L.id)*.42+300);return{n:L.mc,k:kwh,r:+(kwh/a*1000).toFixed(1)}});
+  mk('cEnergy',{data:{labels:en.map(x=>x.n),datasets:[
+    {type:'bar',label:'พลังงานรวม (kWh)',data:en.map(x=>x.k),backgroundColor:'#10b981',borderRadius:5,yAxisID:'y'},
+    {type:'line',label:'kWh ต่อ 1,000 ชิ้น',data:en.map(x=>x.r),borderColor:'#f59e0b',pointRadius:4,tension:.3,yAxisID:'y1'}]},
+    options:{...baseOpt,scales:{x:G,y:{...G,beginAtZero:true},y1:{position:'right',beginAtZero:true,grid:{display:false},border:{display:false}}}}});
+
+  renderAlerts();renderNoti();renderMcTable();renderPdm();renderLineDetail();
+}
+
+function renderAlerts(){
+  const rows=[];
+  todayRecs().forEach(r=>r.dt.filter(d=>d.min>=18).forEach(d=>rows.push({t:hm(d.start),line:r.mc,p:d.reason,
+    imp:'สูญเสีย ~'+nf(Math.round(d.min*LN(r.line).cap))+' ชิ้น ('+d.min+' นาที)',act:d.action,
+    st:d.min>35?['b-a','ติดตามผล']:['b-g','แก้ไขแล้ว']})));
+  LINES.forEach(L=>{const s=ST[L.id];if(s.alarm)rows.unshift({t:'13:48',line:L.mc,p:'ALARM: '+s.almCode,
+    imp:'เครื่องหยุดอัตโนมัติที่ชิ้นที่ '+nf(s.count),act:'รอผู้ปฏิบัติงานรับทราบและแก้ไข',st:['b-r','เกิดขึ้นขณะนี้']})});
+  todayRecs().filter(r=>r.ngRate>1.8).forEach(r=>rows.push({t:'—',line:r.mc,p:'อัตราของเสียเกินเกณฑ์ ('+r.ngRate.toFixed(2)+'%)',
+    imp:'NG '+nf(r.ng)+' ชิ้น',act:'QA เข้าตรวจสอบแม่พิมพ์ '+r.die,st:['b-a','กำลังแก้ไข']}));
+  $('alertCnt').textContent=rows.length+' รายการวันนี้';
+  $('tblAlert').querySelector('tbody').innerHTML=rows.map(x=>`<tr><td class="mono">${x.t}</td><td>${x.line}</td>
+    <td style="white-space:normal;min-width:150px">${esc(x.p)}</td><td style="white-space:normal">${x.imp}</td>
+    <td style="white-space:normal;min-width:160px">${esc(x.act)}</td><td class="tc"><span class="bg ${x.st[0]}">${x.st[1]}</span></td></tr>`).join('')
+    ||'<tr><td colspan="6" class="empty">ไม่มีการแจ้งเตือน</td></tr>';
+}
+function renderNoti(){
+  const lv=[['b-r','วิกฤต'],['b-a','เตือน'],['b-b','ข้อมูล']];
+  const msgs=[['PRESS-2500T ALARM AL-204 Overload — เครื่องหยุดอัตโนมัติ',0,'PLC'],
+    ['PRESS-1000T อยู่ระหว่างปรับตั้งแม่พิมพ์ DIE-B0871 เกิน 30 นาที',1,'MES'],
+    ['อุณหภูมิน้ำมันไฮดรอลิก PRESS-1500T 56°C เข้าใกล้เกณฑ์ 58°C',1,'IoT Sensor'],
+    ['แม่พิมพ์ DIE-P415 (800T) ใกล้ครบรอบ PM เหลือ 3,800 ครั้ง',1,'Die Management'],
+    ['ตรวจพบความพยายามบันทึกข้อมูลโดยไม่ได้ล็อกสถานี — ระบบปฏิเสธ',1,'Station Lock'],
+    ['บันทึกคุณภาพ In-Process ครบตามแผนทุกไลน์',2,'QA System'],
+    ['พาเลท PLT-'+ymd(TODAY)+'-600-12 ครบ 300 ชิ้น พร้อมเคลื่อนย้าย',2,'Logistics'],
+    ['กะ A เริ่มงานครบทั้ง 5 สถานี เวลา 08:00 น.',2,'HR/Shift']];
+  const d=new Date();
+  $('tblNoti').querySelector('tbody').innerHTML=msgs.map((m,i)=>{const t=new Date(d.getTime()-i*ri(8,30)*6e4);
+    return `<tr><td class="mono">${hhmm(t)}</td><td class="tc"><span class="bg ${lv[m[1]][0]}">${lv[m[1]][1]}</span></td>
+      <td style="white-space:normal;min-width:240px">${esc(m[0])}</td><td class="note">${m[2]}</td></tr>`}).join('');
+}
+function renderMcTable(){
+  $('tblMc').querySelector('tbody').innerHTML=LINES.map((L,i)=>{const s=ST[L.id],st=stStatus(s);
+    return `<tr><td><b style="color:${L.color}">${L.mc}</b><div class="note">${L.proc} · ${L.code}</div></td>
+      <td class="tc"><span class="bg ${st[0]}">${st[1]}</span></td>
+      <td class="tr mono">${s.run?s.spm:0}</td><td class="tr mono">${s.run?s.ld:0}</td>
+      <td class="tr mono" style="color:${s.ot>=58?'#f87171':'inherit'}">${Math.round(s.ot)}</td>
+      <td class="tc">${s.locked?'<span class="bg b-g">🔒 ล็อกแล้ว</span>':'<span class="bg b-n">🔓 ว่าง</span>'}</td>
+      <td style="font-size:12px">${esc(s.user.split(' (')[0])}</td>
+      <td class="tr mono">${nf(18000+i*5600)} ชม.</td></tr>`}).join('');
+}
+function renderPdm(){
+  const items=[['PRESS-600T','ลูกปืนเพลาข้อเหวี่ยง',92,78],['PRESS-800T','ชุดคลัตช์-เบรก',69,24],
+    ['PRESS-1000T','ปั๊มไฮดรอลิก',74,31],['PRESS-1500T','สายพานส่งกำลัง',58,14],
+    ['PRESS-2500T','ระบบหล่อลื่นอัตโนมัติ',46,7],['DIE-P415','ชุด Punch & Die (800T)',52,9]];
+  $('tblPdm').querySelector('tbody').innerHTML=items.map(([mc,cp,h,rul])=>{
+    const c=h>=80?'#10b981':h>=60?'#f59e0b':'#ef4444';const lvl=h>=80?['b-g','ปกติ']:h>=60?['b-a','เฝ้าระวัง']:['b-r','ซ่อมด่วน'];
+    return `<tr><td><b>${mc}</b><div class="note">${cp}</div></td>
+      <td class="tc"><div style="display:flex;align-items:center;gap:7px"><div class="pbar"><i style="width:${h}%;background:${c}"></i></div><b>${h}%</b></div></td>
+      <td class="tr">${rul} วัน</td><td class="tc"><span class="bg ${lvl[0]}">${lvl[1]}</span></td></tr>`}).join('');
+}
+
+/* ===== DASHBOARD : LINE VIEW ===== */
+$('selLine').innerHTML=LINES.map(L=>`<option value="${L.id}">${L.name} (${L.mc}) · ${L.proc}</option>`).join('');
+$('selLine').value='800';$('selLine').onchange=renderLineView;
+$('selLineDetail').innerHTML=LINES.map(L=>`<option value="${L.id}">${L.name} (${L.mc}) · ${L.proc}</option>`).join('');
+$('selLineDetail').value='800';$('selLineDetail').onchange=renderLineDetail;
+function renderLineView(){
+  const id=$('selLine').value,L=LN(id),r=todayRec(id),s=ST[id],st=stStatus(s);
+  $('lineStrip').innerHTML=LINES.map(x=>{const s2=stStatus(ST[x.id]);
+    return `<div class="stcard ${x.id===id?'on':''}" style="border-left-color:${x.color}" onclick="document.getElementById('selLine').value='${x.id}';renderLineView()">
+      <div style="display:flex;align-items:center;gap:7px"><span class="sdot ${s2[2]}"></span><b style="font-size:12.5px;color:${x.color}">${x.mc}</b></div>
+      <div class="note" style="margin-top:3px">${s2[1]}</div></div>`}).join('');
+  $('lineKpi').innerHTML=[
+    `<div class="kpi"><div class="lb">สถานะเครื่อง</div><div class="vl" style="font-size:18px">${st[1]}</div>
+      <div class="df">${L.mc} · SPM ${s.run?s.spm:0} · Load ${s.run?s.ld:0}%</div></div>`,
+    kpi('ผลิตแล้ว / แผน',nf(r.actual)+' / '+nf(r.plan),'',r.actual>=r.plan?'ok':'warn','ความคืบหน้า '+(r.actual/r.plan*100).toFixed(1)+'%'),
+    kpi('OEE ไลน์นี้',r.oee.toFixed(1),'%',r.oee>=85?'ok':'warn','A '+r.avail.toFixed(0)+'% × P '+r.perf.toFixed(0)+'% × Q '+r.qual.toFixed(0)+'%'),
+    kpi('Downtime สะสม',r.dtMin,'นาที',r.dtMin<=45?'ok':'warn',r.dt.length+' เหตุการณ์')].join('');
+  $('jobStatus').innerHTML=`<span class="bg ${st[0]}">${st[1]}</span>`;
+  $('jobBox').innerHTML=`
+    <div style="display:flex;gap:12px;align-items:center;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--line)">
+      <div style="width:130px;flex-shrink:0">${partIconSVG(r.partName,L.color)}</div>
+      <div><div class="mono" style="font-size:15px;font-weight:800;color:${L.color}">${r.part}</div>
+        <div style="font-size:12.5px;margin-top:3px">${r.partName}</div>
+        <div class="note" style="margin-top:3px">${L.mc} · ${L.proc}</div></div>
+    </div>
+    <div class="kv">
+    <div><div class="k">กระบวนการ</div><div class="v" style="color:${L.color}">${L.proc}</div></div>
+    <div><div class="k">Part No.</div><div class="v mono">${r.part}</div></div>
+    <div><div class="k">ชื่อชิ้นงาน</div><div class="v" style="font-size:12.5px">${r.partName}</div></div>
+    <div><div class="k">Lot No.</div><div class="v mono">${r.lot}</div></div>
+    <div><div class="k">แม่พิมพ์</div><div class="v mono">${r.die}</div></div>
+    <div><div class="k">Coil Lot</div><div class="v mono">${r.coil}</div></div>
+    <div><div class="k">วัสดุ</div><div class="v">${r.mat}</div></div>
+    <div><div class="k">ของดี / ของเสีย</div><div class="v"><span style="color:#34d399">${nf(r.ok)}</span> / <span style="color:#f87171">${nf(r.ng)}</span></div></div>
+    <div><div class="k">อัตราของเสีย</div><div class="v">${r.ngRate.toFixed(2)}%</div></div>
+    <div><div class="k">พาเลทที่ปิดแล้ว</div><div class="v">${r.pallets.length} พาเลท</div></div>
+    <div><div class="k">ผู้ควบคุม</div><div class="v" style="font-size:12px">${r.opr.split(' (')[0]}</div></div>
+    <div><div class="k">หัวหน้างาน</div><div class="v" style="font-size:12px">${r.leader.split(' (')[0]}</div></div></div>`;
+  mk('cLineOEE',{type:'bar',data:{labels:['Availability','Performance','Quality','OEE'],datasets:[{data:[r.avail,r.perf,r.qual,r.oee],backgroundColor:['#3b82f6','#06b6d4','#10b981','#8b5cf6'],borderRadius:6}]},
+    options:{...baseOpt,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.raw.toFixed(1)+'%'}}},scales:{x:{grid:{display:false},border:{display:false}},y:{...G,beginAtZero:true,max:100}}}});
+  const hrs=[],tar=[],ah=[];let acc=0;
+  for(let i=0;i<11;i++){hrs.push(pad(8+i)+':00');tar.push(Math.round(r.plan/11));
+    let a=Math.round(r.actual/11*rf(.78,1.18,2));if(acc+a>r.actual)a=Math.max(0,r.actual-acc);acc+=a;ah.push(a)}
+  mk('cHourly',{data:{labels:hrs,datasets:[{type:'bar',label:'ผลิตจริง',data:ah,backgroundColor:L.color,borderRadius:4},
+    {type:'line',label:'เป้าหมาย/ชม.',data:tar,borderColor:'#ef4444',borderDash:[6,4],pointRadius:0}]},options:baseOpt});
+  const TS=480,SPAN=720,col={'แม่พิมพ์':'#f59e0b','คน':'#8b5cf6','อื่นๆ':'#ef4444'};
+  let html='<i style="left:0;width:100%;background:linear-gradient(90deg,rgba(16,185,129,.2),rgba(16,185,129,.35))"></i>';
+  r.dt.forEach(d=>{const l=Math.max(0,(d.start-TS)/SPAN*100),w=Math.min(100-l,d.min/SPAN*100);
+    if(w>0)html+=`<i title="${esc(d.reason)} ${d.min} นาที" style="left:${l}%;width:${w}%;background:${col[d.type]}"></i>`});
+  $('tlBar').innerHTML=html;
+  $('tlAx').innerHTML=['08:00','10:00','12:00','14:00','16:00','18:00','20:00'].map(x=>`<span>${x}</span>`).join('');
+  $('tlLg').innerHTML='<span><i class="sw" style="background:#10b981"></i> เดินเครื่อง</span>'+Object.entries(col).map(([k,v])=>`<span><i class="sw" style="background:${v}"></i> หยุด: ${k}</span>`).join('');
+  $('dtSum').textContent='รวม '+r.dtMin+' นาที · '+r.dt.length+' เหตุการณ์ · Availability '+r.avail.toFixed(1)+'%';
+}
+
+/* รายละเอียดไลน์ (Pareto / Downtime table / QC table) — ย้ายไปหน้ารายงาน */
+function renderLineDetail(){
+  const id=$('selLineDetail').value,r=todayRec(id);
+  const m={};RECORDS.filter(x=>x.line===id).slice(-10).forEach(x=>x.dt.forEach(d=>m[d.reason]=(m[d.reason]||0)+d.min));
+  const arr=Object.entries(m).sort((a,b)=>b[1]-a[1]).slice(0,6);
+  const t2=arr.reduce((a,b)=>a+b[1],0)||1;let c2=0;const cu=arr.map(x=>{c2+=x[1];return +(c2/t2*100).toFixed(1)});
+  mk('cLinePareto',{data:{labels:arr.map(x=>x[0].split(' (')[0]),datasets:[
+    {type:'bar',label:'นาที (10 กะล่าสุด)',data:arr.map(x=>x[1]),backgroundColor:'#f59e0b',borderRadius:4,yAxisID:'y'},
+    {type:'line',label:'สะสม %',data:cu,borderColor:'#ef4444',pointRadius:3,yAxisID:'y1'}]},
+    options:{...baseOpt,scales:{x:{...G,ticks:{maxRotation:40,minRotation:25,font:{size:10}}},y:{...G,beginAtZero:true},y1:{position:'right',max:100,beginAtZero:true,grid:{display:false},border:{display:false}}}}});
+  $('tblDt').querySelector('tbody').innerHTML=r.dt.map(d=>`<tr><td class="mono">${hm(d.start)}</td><td class="mono">${hm(d.end)}</td>
+    <td class="tr"><b>${d.min}</b></td><td><span class="bg ${d.type==='แม่พิมพ์'?'b-a':d.type==='คน'?'b-p':'b-r'}">${d.type}</span></td>
+    <td style="white-space:normal">${esc(d.reason)}<div class="note">แก้ไข: ${esc(d.action)}</div></td><td>${d.by}</td></tr>`).join('');
+  $('tblLq').querySelector('tbody').innerHTML=r.qrs.slice().reverse().slice(0,14).map(q=>`<tr><td class="mono">${q.time}</td>
+    <td style="font-size:11.5px">${q.point}</td><td class="tr mono">${nf(q.at)}</td><td class="tr mono">${q.th.toFixed(3)}</td>
+    <td class="tr mono">${q.pi.toFixed(2)}</td><td class="tr mono">${q.dh.toFixed(2)}</td><td class="tr mono">${q.spm}</td>
+    <td class="tc"><span class="bg ${q.judge==='OK'?'b-g':'b-r'}">${q.judge}</span>${q.ngq?'<div class="note">'+q.ngq+' ชิ้น</div>':''}</td>
+    <td class="mono" style="font-size:11px">${q.pal}</td><td style="font-size:12px">${q.by.split(' (')[0]}</td></tr>`).join('');
+}
+
+/* ===== SUPERVISOR ===== */
+(function(){const f=new Date(TODAY);f.setDate(f.getDate()-6);
+  $('fFrom').value=iso(f);$('fTo').value=TD;
+  $('fLine').innerHTML='<option value="">ทั้งหมด (5 ไลน์)</option>'+LINES.map(L=>`<option value="${L.id}">${L.name} (${L.proc})</option>`).join('');
+  $('fPart').innerHTML='<option value="">ทั้งหมด</option>'+PARTS.map(p=>`<option value="${p.no}">${p.no} — ${p.name}</option>`).join('')})();
+let FILTERED=[];
+function resetFilter(){const f=new Date(TODAY);f.setDate(f.getDate()-6);$('fFrom').value=iso(f);$('fTo').value=TD;
+  $('fLine').value='';$('fShift').value='';$('fPart').value='';runFilter()}
+function runFilter(){
+  const a=$('fFrom').value,b=$('fTo').value,l=$('fLine').value,s=$('fShift').value,p=$('fPart').value;
+  FILTERED=RECORDS.filter(r=>(!a||r.date>=a)&&(!b||r.date<=b)&&(!l||r.line===l)&&(!s||r.shift===s)&&(!p||r.part===p))
+    .sort((x,y)=>y.date.localeCompare(x.date)||x.line.localeCompare(y.line));
+  const plan=sum(FILTERED,'plan'),act=sum(FILTERED,'actual'),ok=sum(FILTERED,'ok'),ng=sum(FILTERED,'ng'),dtm=sum(FILTERED,'dtMin');
+  $('supInfo').textContent='พบ '+FILTERED.length+' รายการ';
+  $('supKpi').innerHTML=[kpi('จำนวนบันทึก',FILTERED.length,'รายการ'),kpi('แผนรวม',nf(plan),'ชิ้น'),
+    kpi('ผลิตจริงรวม',nf(act),'ชิ้น',act>=plan?'ok':'warn',plan?(act/plan*100).toFixed(1)+'% ของแผน':''),
+    kpi('OK',nf(ok),'ชิ้น','ok',act?(ok/act*100).toFixed(2)+'%':'','up'),
+    kpi('NG',nf(ng),'ชิ้น',act&&ng/act*100<=1.5?'ok':'bad',act?(ng/act*100).toFixed(2)+'%':'','down'),
+    kpi('Downtime รวม',nf(dtm),'นาที',dtm<600?'ok':'warn',(dtm/60).toFixed(1)+' ชั่วโมง')].join('');
+  mk('cSupOkNg',{type:'doughnut',plugins:[centerTxt],data:{labels:['OK','NG'],datasets:[{data:[ok,ng],backgroundColor:['#10b981','#ef4444'],borderWidth:0}]},
+    options:{responsive:true,maintainAspectRatio:false,cutout:'66%',plugins:{legend:{position:'bottom',labels:{boxWidth:10,usePointStyle:true,pointStyle:'circle',color:'#334155'}},
+      ct:{main:(act?ng/act*100:0).toFixed(2)+'%',sub:'อัตรา NG',color:'#ef4444'},tooltip:{callbacks:{label:c=>c.label+': '+nf(c.raw)+' ชิ้น'}}}}});
+  const dd={};FILTERED.forEach(r=>Object.entries(r.defs).forEach(([k,v])=>dd[k]=(dd[k]||0)+v));
+  const de=Object.entries(dd).sort((a,b)=>b[1]-a[1]);
+  mk('cSupDef',{type:'bar',data:{labels:de.map(x=>x[0].split(' (')[0]),datasets:[{label:'ชิ้น',data:de.map(x=>x[1]),backgroundColor:'#3b82f6',borderRadius:4}]},
+    options:{...baseOpt,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{...G,beginAtZero:true},y:{grid:{display:false},border:{display:false},ticks:{font:{size:10}}}}}});
+  $('tblSup').querySelector('tbody').innerHTML=FILTERED.length?FILTERED.map((r,i)=>`
+    <tr class="exp" onclick="togg(${i})"><td class="tc"><span class="caret" id="cr${i}">▶</span></td>
+    <td>${thD(r.dateObj)}</td><td style="color:${LN(r.line).color};font-weight:700">${r.lineName}<div class="note">${r.proc}</div></td>
+    <td>${r.shift}</td><td class="mono">${r.part}</td><td class="mono" style="font-size:11.5px">${r.lot}</td>
+    <td class="tr">${nf(r.plan)}</td><td class="tr"><b>${nf(r.actual)}</b></td>
+    <td class="tr" style="color:#34d399">${nf(r.ok)}</td><td class="tr" style="color:#f87171">${nf(r.ng)}</td>
+    <td class="tc"><span class="bg ${r.ngRate<=1?'b-g':r.ngRate<=2?'b-a':'b-r'}">${r.ngRate.toFixed(2)}%</span></td>
+    <td class="tr">${r.dtMin} น.</td><td class="tc"><b>${r.oee.toFixed(1)}%</b></td>
+    <td style="font-size:12px">${r.opr.split(' (')[0]}</td></tr>
+    <tr class="exp-row" id="ex${i}" style="display:none"><td colspan="14"><div class="exp-in"><div class="grid g2">
+      <div><h4 style="font-size:13px;margin-bottom:8px">⏱️ Downtime (${r.dt.length} ครั้ง · ${r.dtMin} นาที)</h4>
+        <div class="tw"><table><thead><tr><th>เริ่ม</th><th class="tr">นาที</th><th>ประเภท</th><th>สาเหตุ / การแก้ไข</th></tr></thead><tbody>
+        ${r.dt.map(d=>`<tr><td class="mono">${hm(d.start)}</td><td class="tr">${d.min}</td>
+          <td><span class="bg ${d.type==='แม่พิมพ์'?'b-a':d.type==='คน'?'b-p':'b-r'}">${d.type}</span></td>
+          <td style="white-space:normal">${esc(d.reason)}<div class="note">${esc(d.action)}</div></td></tr>`).join('')}</tbody></table></div>
+        <h4 style="font-size:13px;margin:14px 0 8px">🧪 สัดส่วนของเสีย (รวม ${r.ng} ชิ้น)</h4>
+        ${Object.entries(r.defs).map(([k,v])=>`<div style="display:flex;align-items:center;gap:9px;margin-bottom:5px">
+          <span style="width:140px;font-size:12px">${k}</span><div class="pbar" style="flex:1"><i style="width:${r.ng?v/r.ng*100:0}%;background:#f59e0b"></i></div><b style="font-size:12px">${v}</b></div>`).join('')}
+      </div>
+      <div><h4 style="font-size:13px;margin-bottom:8px">📋 บันทึกคุณภาพ (${r.qrs.length} จุด)</h4>
+        <div class="tw" style="max-height:230px;overflow:auto"><table><thead><tr><th>เวลา</th><th>จุดตรวจ</th><th class="tr">Thk</th><th class="tr">Pitch</th><th class="tr">DieH</th><th class="tc">ผล</th><th>Pallet</th></tr></thead><tbody>
+        ${r.qrs.map(q=>`<tr><td class="mono">${q.time}</td><td style="font-size:11.5px">${q.point}</td>
+          <td class="tr mono">${q.th.toFixed(3)}</td><td class="tr mono">${q.pi.toFixed(2)}</td><td class="tr mono">${q.dh.toFixed(2)}</td>
+          <td class="tc"><span class="bg ${q.judge==='OK'?'b-g':'b-r'}">${q.judge}</span></td><td class="mono" style="font-size:11px">${q.pal}</td></tr>`).join('')}</tbody></table></div>
+        <div class="kv" style="margin-top:12px">
+          <div><div class="k">เครื่อง</div><div class="v mono">${r.mc}</div></div>
+          <div><div class="k">แม่พิมพ์</div><div class="v mono">${r.die}</div></div>
+          <div><div class="k">Coil Lot</div><div class="v mono">${r.coil}</div></div>
+          <div><div class="k">วัสดุ</div><div class="v" style="font-size:12.5px">${r.mat}</div></div>
+          <div><div class="k">หัวหน้างาน</div><div class="v" style="font-size:12px">${r.leader.split(' (')[0]}</div></div>
+          <div><div class="k">พาเลทที่ปิด</div><div class="v">${r.pallets.length} พาเลท</div></div></div>
+      </div></div></div></td></tr>`).join('')
+    :'<tr><td colspan="14" class="empty">ไม่พบข้อมูลตามเงื่อนไข</td></tr>';
+}
+function togg(i){const e=$('ex'+i),c=$('cr'+i),o=e.style.display!=='none';e.style.display=o?'none':'';c.classList.toggle('open',!o)}
+function exportCSV(){
+  if(!FILTERED.length){toast('ไม่มีข้อมูลสำหรับส่งออก');return}
+  const h=['วันที่','ไลน์','เครื่อง','กระบวนการ','กะ','Part No.','ชื่อชิ้นงาน','Lot No.','Coil Lot','แม่พิมพ์','แผน','ผลิตจริง','OK','NG','%NG','Downtime(นาที)','Availability','Performance','Quality','OEE','ผู้ควบคุม','หัวหน้างาน'];
+  const rows=FILTERED.map(r=>[r.date,r.lineName,r.mc,r.proc,r.shift,r.part,r.partName,r.lot,r.coil,r.die,r.plan,r.actual,r.ok,r.ng,
+    r.ngRate.toFixed(2),r.dtMin,r.avail.toFixed(1),r.perf.toFixed(1),r.qual.toFixed(1),r.oee.toFixed(1),r.opr,r.leader]);
+  const csv='\ufeff'+[h,...rows].map(x=>x.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\r\n');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8;'}));
+  a.download='Production_Record_'+$('fFrom').value+'_to_'+$('fTo').value+'.csv';a.click();
+  toast('ส่งออก CSV เรียบร้อย ('+FILTERED.length+' รายการ)');
+}
+function renderShiftReport(){
+  $('repDate').textContent=thFull(new Date());
+  const rs=todayRecs();
+  $('tblRep').querySelector('tbody').innerHTML=rs.map(r=>{const L=LN(r.line);
+    return `<tr><td><b style="color:${L.color}">${r.mc}</b></td><td>${r.proc}</td><td class="mono">${r.part}<div class="note">${r.partName}</div></td>
+      <td class="tr">${nf(r.plan)}</td><td class="tr"><b>${nf(r.actual)}</b></td><td class="tr" style="color:#34d399">${nf(r.ok)}</td>
+      <td class="tr" style="color:#f87171">${nf(r.ng)}</td><td class="tc">${r.ngRate.toFixed(2)}%</td>
+      <td class="tr">${r.dtMin} น.</td><td class="tc"><b>${r.oee.toFixed(1)}%</b></td></tr>`}).join('');
+  const p=sum(rs,'plan'),a=sum(rs,'actual'),o=sum(rs,'ok'),n=sum(rs,'ng'),d=sum(rs,'dtMin');
+  $('tblRep').querySelector('tfoot').innerHTML=`<tr style="background:#1a253f;font-weight:800">
+    <td colspan="3">รวมทั้งกะ (Total)</td><td class="tr">${nf(p)}</td><td class="tr">${nf(a)}</td>
+    <td class="tr" style="color:#34d399">${nf(o)}</td><td class="tr" style="color:#f87171">${nf(n)}</td>
+    <td class="tc">${(n/a*100).toFixed(2)}%</td><td class="tr">${nf(d)} น.</td><td class="tc">${avg(rs.map(r=>r.oee)).toFixed(1)}%</td></tr>`;
+  const dtRows=[];rs.forEach(r=>r.dt.forEach(x=>dtRows.push({...x,mc:r.mc})));
+  dtRows.sort((x,y)=>x.start-y.start);
+  $('tblRepDt').querySelector('tbody').innerHTML=dtRows.map(x=>`<tr><td class="mono">${hm(x.start)}–${hm(x.end)}</td>
+    <td>${x.mc}</td><td class="tr"><b>${x.min}</b></td>
+    <td><span class="bg ${x.type==='แม่พิมพ์'?'b-a':x.type==='คน'?'b-p':'b-r'}">${x.type}</span></td>
+    <td style="white-space:normal">${esc(x.reason)}</td><td style="white-space:normal">${esc(x.action)}</td></tr>`).join('');
+  const top=dtRows.slice().sort((x,y)=>y.min-x.min).slice(0,3);
+  $('repIssues').innerHTML=top.map(x=>`<li>${x.mc}: ${esc(x.reason)} หยุด ${x.min} นาที — ${esc(x.action)}</li>`).join('')
+    +`<li>PRESS-2500T: เกิด ALARM AL-204 (Overload) เครื่องหยุดอัตโนมัติ อยู่ระหว่างให้ช่างตรวจสอบ</li>`;
+}
+
+/* ===== OPERATOR ===== */
+function renderStations(){
+  $('stTabs').innerHTML=LINES.map(L=>{const s=ST[L.id],st=stStatus(s);
+    return `<button class="stab" style="${L.id===CUR?'background:'+L.color+';color:#fff;border-color:'+L.color:''}" onclick="switchStation('${L.id}')">
+      <span class="sdot ${st[2]}"></span>${L.mc}${s.locked?' 🔒':''}</button>`}).join('');
+  $('stOverview').innerHTML=LINES.map(L=>{const s=ST[L.id],st=stStatus(s);
+    const pr=Math.min(100,s.count/s.target*100),ng=s.qrs.reduce((a,b)=>a+b.ngq,0);
+    return `<div class="stcard ${L.id===CUR?'on':''}" style="border-left-color:${L.color}" onclick="switchStation('${L.id}')">
+      <div style="display:flex;justify-content:space-between;gap:6px"><b style="font-size:13px;color:${L.color}">${L.mc}</b><span class="bg ${st[0]}">${st[1].split(' (')[0]}</span></div>
+      <div style="font-size:22px;font-weight:800;margin-top:4px">${nf(s.count)}<span style="font-size:11.5px;color:var(--muted)"> / ${nf(s.target)}</span></div>
+      <div class="pbar" style="margin:7px 0 5px"><i style="width:${pr}%;background:${L.color}"></i></div>
+      <div class="note" style="font-size:11px">${s.locked?'🔒 '+esc(s.user.split(' (')[0]):'🔓 ว่าง'} · ${L.proc}<br>
+        NG ${ng} · คุณภาพ ${s.qrs.length} · ปัญหา ${s.dts.length}</div></div>`}).join('');
+  $('hdLock').textContent='🔒 ล็อกแล้ว '+LINES.filter(L=>ST[L.id].locked).length+' สถานี';
+}
+function switchStation(id){CUR=id;renderOpr()}
+function renderOpr(){
+  const s=CS(),L=LN(s.id),p=stPart(s),st=stStatus(s);
+  $('stTitle').textContent='สถานี '+s.mc+' — '+s.name+' ('+L.proc+')';
+  $('lockBar').innerHTML=s.locked
+    ?`<div class="lockbar" style="background:linear-gradient(110deg,${L.color},${L.color}bb)"><span style="font-size:26px">🔒</span>
+      <div><div class="t">ล็อกสถานี: ${s.mc} (${L.proc})</div>
+      <div class="s" style="color:#fff">ผู้ปฏิบัติงาน ${esc(s.user)} · รหัสสถานี ${s.code} · ทุกรายการบันทึกเข้าเครื่องนี้เท่านั้น</div></div>
+      <div class="sp"><button class="btn-w" onclick="logout('${s.id}')">ออกจากระบบ</button></div></div>`
+    :`<div class="lockbar off"><span style="font-size:26px">🔓</span><div><div class="t">ยังไม่ได้เข้าสู่ระบบสถานี ${s.mc}</div>
+      <div class="s">ระบบปิดการบันทึกเพื่อป้องกันการคีย์ข้อมูลผิดเครื่อง</div></div>
+      <div class="sp"><button class="btn-w" onclick="openLogin('${s.id}')">🔐 เข้าสู่ระบบสถานีนี้</button></div></div>`;
+  $('oprBody').className=s.locked?'':'lockout';
+  $('mcName').textContent=s.mc;$('oLineName').textContent=s.name;$('oLineName').style.color=L.color;
+  $('plcProc').textContent='กระบวนการ: '+L.proc;$('mcState').textContent=st[1];$('led').className='led '+st[2];
+  $('jobBadge').textContent=st[1];$('jobBadge').className='bg '+st[0];
+  $('plcParams').innerHTML=(L.proc==='Stamping')
+    ?`<div><div class="l">SPM</div><div class="v">${s.run?s.spm:0}</div></div>
+      <div><div class="l">CUSHION (bar)</div><div class="v">${(118+ +s.id/1000).toFixed(1)}</div></div>
+      <div><div class="l">DRAW DEPTH (mm)</div><div class="v">${(60+ +s.id/100).toFixed(1)}</div></div>
+      <div><div class="l">DIE HEIGHT (mm)</div><div class="v">${s.dh.toFixed(1)}</div></div>
+      <div><div class="l">LOAD (%)</div><div class="v">${s.run?s.ld:0}</div></div>
+      <div><div class="l">OIL TEMP (°C)</div><div class="v">${Math.round(s.ot)}</div></div>`
+    :`<div><div class="l">SPM</div><div class="v">${s.run?s.spm:0}</div></div>
+      <div><div class="l">FEED PITCH (mm)</div><div class="v">${s.pi.toFixed(2)}</div></div>
+      <div><div class="l">COIL WIDTH (mm)</div><div class="v">${s.cw.toFixed(1)}</div></div>
+      <div><div class="l">THICKNESS (mm)</div><div class="v">${s.th.toFixed(2)}</div></div>
+      <div><div class="l">LOAD (%)</div><div class="v">${s.run?s.ld:0}</div></div>
+      <div><div class="l">OIL TEMP (°C)</div><div class="v">${Math.round(s.ot)}</div></div>`;
+  $('oMc').value=s.mc+' · '+s.name+' · '+s.code;
+  $('oPart').innerHTML=PARTS.filter(x=>x.line===s.id).map(x=>`<option value="${x.no}">${x.no} — ${x.name}</option>`).join('');
+  $('oPart').value=s.part;$('oShift').value=s.shift;$('oTarget').value=s.target;
+  $('oOpr').value=s.locked?s.user:'— ยังไม่ได้เข้าสู่ระบบ —';
+  $('oLot').value=stLot(s);$('oDie').value=p.die;$('oCoil').value=stCoil(s);
+  $('btnStart').disabled=s.started;$('btnFinish').disabled=!s.started;
+  $('btnAuto').textContent=s.auto?'⏸ หยุดเดินเครื่องอัตโนมัติ':'▶ เดินเครื่องอัตโนมัติ (จำลอง)';
+  $('btnAuto').className=s.auto?'btn am':'btn gy';
+  drawCount();renderLog();renderStations();
+}
+$('oPart').onchange=()=>{const s=CS(),p=PARTS.find(x=>x.no===$('oPart').value);
+  if(!p||p.line!==s.id){toast('🚫 Part นี้ไม่อยู่ในแผนของ '+s.mc);renderOpr();return}
+  s.part=p.no;s.th=p.th;s.pi=p.pi;s.cw=p.cw;s.dh=p.dh;
+  addLog('ตั้งค่า','เปลี่ยนงานเป็น '+p.no+' ('+p.name+') / แม่พิมพ์ '+p.die,'b-b',s);renderOpr()};
+$('oTarget').oninput=()=>{CS().target=+$('oTarget').value||0;drawCount();renderStations()};
+$('oShift').onchange=()=>{CS().shift=$('oShift').value;$('oLot').value=stLot(CS())};
+
+function drawCount(){const s=CS(),t=s.target||1,ng=s.qrs.reduce((a,b)=>a+b.ngq,0);
+  $('cntNum').textContent=nf(s.count);$('cntBar').style.width=Math.min(100,s.count/t*100)+'%';
+  $('cntBar').style.background=s.count>=t?'#10b981':s.color;
+  $('cntTar').textContent=nf(s.target);$('cntNext').textContent=nf((Math.floor(s.count/300)+1)*300);
+  $('palCur').textContent=stPal(s);$('palQty').textContent=s.palQty;
+  $('oprSum').innerHTML=`
+    <div><div class="k">ผลิตแล้ว</div><div class="v">${nf(s.count)} ชิ้น</div></div>
+    <div><div class="k">ของดี (ประมาณ)</div><div class="v" style="color:#34d399">${nf(s.count-ng)}</div></div>
+    <div><div class="k">ของเสีย</div><div class="v" style="color:#f87171">${nf(ng)}</div></div>
+    <div><div class="k">บันทึกคุณภาพ</div><div class="v">${s.qrs.length} ครั้ง</div></div>
+    <div><div class="k">แจ้งปัญหา</div><div class="v">${s.dts.length} ครั้ง</div></div>
+    <div><div class="k">Downtime รวม</div><div class="v">${s.dts.reduce((a,b)=>a+b.min,0)} นาที</div></div>
+    <div><div class="k">พาเลทที่ปิดแล้ว</div><div class="v">${s.pal-1} พาเลท</div></div>
+    <div><div class="k">Lot ปัจจุบัน</div><div class="v mono" style="font-size:11.5px">${stLot(s)}</div></div>`;
+}
+function addLog(type,detail,cls,s){s=s||CS();
+  s.log.unshift({t:now(),st:s.mc,color:s.color,type,detail,at:s.count,by:s.user||'ระบบ',cls:cls||'b-n'});renderLog()}
+function toggleLogAll(){LOGALL=!LOGALL;$('btnLogAll').textContent=LOGALL?'👁️ ดูเฉพาะสถานีนี้':'👁️ ดูรวมทุกสถานี';
+  $('btnLogAll').className=LOGALL?'btn':'btn gy';renderLog()}
+function renderLog(){
+  const rows=LOGALL?LINES.flatMap(L=>ST[L.id].log).sort((a,b)=>b.t.localeCompare(a.t)):CS().log;
+  $('logCnt').textContent=rows.length+' รายการ'+(LOGALL?' (ทุกสถานี)':' · '+CS().mc);
+  $('tblLog').querySelector('tbody').innerHTML=rows.slice(0,200).map(l=>`<tr><td class="mono">${l.t}</td>
+    <td class="mono" style="font-size:11.5px;color:${l.color};font-weight:700">${l.st}</td>
+    <td class="tc"><span class="bg ${l.cls}">${l.type}</span></td>
+    <td style="white-space:normal;min-width:260px">${esc(l.detail)}</td>
+    <td class="tr mono">${nf(l.at)}</td><td style="font-size:12px">${esc(String(l.by).split(' (')[0])}</td></tr>`).join('')
+    ||'<tr><td colspan="6" class="empty">ยังไม่มีบันทึก</td></tr>';
+}
+/* login */
+let LGID='600';
+function openLogin(id){LGID=id||CUR;const L=LN(LGID);
+  $('lgBanner').style.background=L.color;$('lgMc').textContent=L.mc;$('lgLine').textContent=L.name+' · '+L.proc+' · '+L.code;
+  $('lgUser').innerHTML=OPRS.map(o=>`<option>${o}</option>`).join('');$('lgUser').value=STAFF[LGID];
+  $('lgPin').value='';$('lgCode').value='';$('lgCode').classList.remove('err');
+  $('lgHint').textContent='รหัสต้องตรงกับเครื่องที่เลือกเท่านั้น';$('lgHint').style.color='';openM('ovLogin')}
+function pin(k){const e=$('lgPin');if(k==='C')e.value='';else if(k==='B')e.value=e.value.slice(0,-1);else if(e.value.length<4)e.value+=k}
+function scanQR(){$('lgCode').value=LN(LGID).code;$('lgCode').classList.remove('err');
+  $('lgHint').textContent='✓ สแกนสำเร็จ — รหัสตรงกับ '+LN(LGID).mc;$('lgHint').style.color='#34d399'}
+function doLogin(){const L=LN(LGID),s=ST[LGID];
+  if($('lgPin').value.trim().length!==4){toast('กรุณากรอก PIN 4 หลัก');return}
+  if($('lgCode').value.trim().toUpperCase()!==L.code){$('lgCode').classList.add('err');
+    $('lgHint').textContent='✖ รหัสสถานีไม่ตรงกับ '+L.mc+' — ระบบปฏิเสธเพื่อป้องกันบันทึกผิดเครื่อง';
+    $('lgHint').style.color='#f87171';toast('🚫 รหัสสถานีไม่ถูกต้อง');return}
+  s.locked=true;s.user=$('lgUser').value;s.lastAct=Date.now();
+  addLog('LOGIN','เข้าสู่ระบบสถานี '+L.mc+' (ยืนยันรหัส '+L.code+') โดย '+s.user,'b-b',s);
+  closeM('ovLogin');CUR=LGID;renderOpr();toast('🔒 ล็อกสถานี '+L.mc+' สำเร็จ')}
+function logout(id){const s=ST[id];addLog('LOGOUT','ออกจากระบบสถานี '+s.mc,'b-n',s);
+  s.locked=false;s.user='';s.run=false;if(s.auto){clearInterval(s.auto);s.auto=null}renderOpr();toast('🔓 ปลดล็อกสถานีแล้ว')}
+function requireLock(){const s=CS();if(!s.locked){toast('🚫 ต้องเข้าสู่ระบบสถานีก่อน');openLogin(s.id);return false}s.lastAct=Date.now();return true}
+/* job control */
+function startJob(){if(!requireLock())return;const s=CS();s.started=true;s.run=true;s.alarm=false;
+  addLog('START','เริ่มงาน Lot '+stLot(s)+' / แม่พิมพ์ '+stPart(s).die,'b-b',s);renderOpr();openQuality('start')}
+function finishJob(){if(!requireLock())return;const s=CS();if(!s.started)return;openQuality('finish');
+  s.run=false;s.started=false;if(s.auto){clearInterval(s.auto);s.auto=null}
+  addLog('FINISH','จบงาน รวมผลิต '+nf(s.count)+' ชิ้น','b-n',s);renderOpr()}
+function toggleAuto(){if(!requireLock())return;const s=CS();
+  if(!s.started){toast('กรุณากดเริ่มงานก่อน');return}
+  if(s.auto){clearInterval(s.auto);s.auto=null}else{s.run=true;s.auto=setInterval(()=>{if(!s.alarm&&s.run)addCount(1,s.id)},700)}
+  renderOpr()}
+function addCount(n,id){const s=id?ST[id]:CS();
+  if(!s.locked){toast('🚫 สถานียังไม่ได้เข้าสู่ระบบ');return}
+  if(!s.started){toast('กรุณากดเริ่มงานก่อน');return}
+  if(s.alarm){toast(s.mc+' อยู่ในสถานะ ALARM');return}
+  for(let i=0;i<n;i++){s.count++;s.palQty++;
+    if(s.count%300===0){if(s.auto){clearInterval(s.auto);s.auto=null}s.pendingQ='inproc';
+      if(s.id===CUR){drawCount();renderOpr();openQuality('inproc')}else toast('🔔 '+s.mc+' ครบ '+nf(s.count)+' ชิ้น — รอบันทึกคุณภาพ');
+      return}}
+  if(s.id===CUR)drawCount();renderStations()}
+/* issue */
+let isType='die',ISST='600';
+function openIssue(t){if(!requireLock())return;const s=CS(),L=LN(s.id);isType=t;ISST=s.id;
+  $('isTitle').textContent={die:'🧰 แจ้งปัญหาแม่พิมพ์ (Die)',man:'👷 แจ้งปัญหาด้านคน (Man)',other:'⚠️ แจ้งปัญหาอื่น ๆ (Other)'}[t];
+  $('isBanner').style.background=L.color;$('isMc').textContent=s.mc+' · '+s.code;
+  $('isBy').value=s.user;$('isTime').value=now();$('isCnt').value=nf(s.count)+' ชิ้น';
+  $('isCause').innerHTML=DT_REASON[t].map(x=>`<option>${x}</option>`).join('')+'<option>อื่น ๆ (ระบุในหมายเหตุ)</option>';
+  $('isNote').value='';$('isDur').value=15;$('isChk').checked=false;$('isSave').disabled=true;
+  $('isChkL').textContent='ยืนยันว่าปัญหานี้เกิดที่เครื่อง '+s.mc;openM('ovIssue')}
+function saveIssue(){const s=ST[ISST],typ={die:'แม่พิมพ์',man:'คน',other:'อื่นๆ'}[isType],min=+$('isDur').value||1;
+  s.dts.push({min,type:typ,reason:$('isCause').value,start:0,end:0,by:s.user,action:$('isNote').value||'อยู่ระหว่างแก้ไข'});
+  addLog('ปัญหา','['+typ+'] '+$('isCause').value+' · หยุด '+min+' นาที · แจ้ง '+$('isTo').value+($('isNote').value?' · '+$('isNote').value:''),
+    isType==='die'?'b-a':isType==='man'?'b-p':'b-r',s);
+  s.run=false;if(s.auto){clearInterval(s.auto);s.auto=null}
+  closeM('ovIssue');renderOpr();toast('บันทึกปัญหาของ '+s.mc+' เรียบร้อย');
+  setTimeout(()=>{if(s.started&&!s.alarm){s.run=true;addLog('RESUME','แก้ไขปัญหาแล้ว กลับมาเดินเครื่องต่อ','b-g',s);renderOpr()}},4500)}
+/* quality */
+let qMode='inproc',QST='600';
+function openQuality(mode){if(!requireLock())return;const s=CS(),L=LN(s.id),p=stPart(s);qMode=mode;QST=s.id;
+  const map={start:['เริ่มงาน (First Article)','ตรวจชิ้นแรกก่อนผลิตจริง'],inproc:['ระหว่างผลิต (In-Process)','ครบ '+nf(s.count)+' ชิ้น — ตรวจตามรอบ 300 ชิ้น'],
+    finish:['จบงาน (Last Article)','ตรวจชิ้นสุดท้ายก่อนปิด Lot'],manual:['ตรวจเพิ่มเติม (Manual)','บันทึกโดยผู้ปฏิบัติงาน']}[mode];
+  $('qTitle').textContent='บันทึกคุณภาพ — '+map[0];$('qSub').textContent=s.mc+' · '+map[1];
+  $('qBanner').style.background=L.color;$('qMc').textContent=s.mc+' · '+s.code;
+  $('qMcSub').textContent='ผู้ล็อกสถานี '+s.user.split(' (')[0]+' · '+L.proc;
+  $('qPoint').value=map[0];$('qTime').value=now();$('qAt').value=nf(s.count)+' ชิ้น';$('qLot').value=stLot(s);
+  $('lbTh').textContent='Thickness (mm) · '+p.th.toFixed(2)+' ± '+TOL.th;
+  $('lbPi').textContent='Pitch (mm) · '+p.pi.toFixed(2)+' ± '+TOL.pi;
+  $('lbDh').textContent='Die Height (mm) · '+p.dh.toFixed(1)+' ± '+TOL.dh;
+  $('qTh').value=(p.th+rf(-.03,.03,3)).toFixed(3);$('qPi').value=(p.pi+rf(-.06,.06,3)).toFixed(3);
+  $('qDh').value=(p.dh+rf(-.2,.2,2)).toFixed(2);$('qSpm').value=s.spm;
+  $('qJudge').value='OK';$('qNgQty').value=0;$('qDefType').innerHTML=DEFECTS.map(d=>`<option>${d}</option>`).join('');
+  $('qBy').value=pick(QCS);
+  const full=(mode==='inproc'||mode==='finish');$('qPal').value=full?stPal(s):'-';$('qPalQty').value=full?s.palQty:0;
+  $('qChk').checked=false;$('qSave').disabled=true;$('qChkL').textContent='ยืนยันว่าข้อมูลชุดนี้เป็นของเครื่อง '+s.mc;
+  qJudgeChange();qSpec();openM('ovQ')}
+function qSpec(){const s=ST[QST],p=stPart(s),bad=[];
+  [['qTh',p.th,TOL.th,'Thickness'],['qPi',p.pi,TOL.pi,'Pitch'],['qDh',p.dh,TOL.dh,'Die Height']].forEach(([id,c,t,nm])=>{
+    const out=Math.abs(+$(id).value-c)>t;$(id).classList.toggle('err',out);if(out)bad.push(nm)});
+  $('qSpecMsg').innerHTML=bad.length?`<b style="color:#f87171">⚠ ค่าหลุดพิกัด: ${bad.join(', ')} — แนะนำตัดสินเป็น NG และแจ้งหัวหน้างาน</b>`
+    :'<span style="color:#34d399;font-weight:700">✓ ทุกค่าอยู่ในพิกัดที่กำหนด</span>';
+  if(bad.length){$('qJudge').value='NG';qJudgeChange()}}
+function qJudgeChange(){const ng=$('qJudge').value==='NG';$('qDefWrap').style.display=ng?'':'none';
+  if(ng&&+$('qNgQty').value===0)$('qNgQty').value=1;if(!ng)$('qNgQty').value=0}
+function saveQuality(){const s=ST[QST];
+  const q={time:$('qTime').value.slice(0,5),point:$('qPoint').value,at:s.count,th:+$('qTh').value,pi:+$('qPi').value,
+    dh:+$('qDh').value,spm:+$('qSpm').value,judge:$('qJudge').value,def:$('qJudge').value==='NG'?$('qDefType').value:'-',
+    ngq:+$('qNgQty').value||0,pal:$('qPal').value,by:$('qBy').value};
+  s.qrs.unshift(q);s.pendingQ=null;
+  addLog('คุณภาพ',q.point+' · Thk '+q.th+' / Pitch '+q.pi+' / DieH '+q.dh+' · ผล '+q.judge+(q.judge==='NG'?' ('+q.def+' '+q.ngq+' ชิ้น)':'')+(q.pal!=='-'?' · Pallet '+q.pal:''),
+    q.judge==='OK'?'b-g':'b-r',s);
+  if(q.pal!=='-'&&(qMode==='inproc'||qMode==='finish')){
+    addLog('พาเลท','ปิดพาเลท '+q.pal+' จำนวน '+$('qPalQty').value+' ชิ้น','b-b',s);s.pal++;s.palQty=0}
+  closeM('ovQ');renderOpr();toast('บันทึกคุณภาพ '+s.mc+' เรียบร้อย ('+q.judge+')')}
+/* pallet */
+let PST='600';
+function openPallet(){if(!requireLock())return;const s=CS(),L=LN(s.id);PST=s.id;
+  $('pSub').textContent='พาเลทของสถานี '+s.mc;$('pBanner').style.background=L.color;$('pMc').textContent=s.mc;
+  $('pNo').value=stPal(s);$('pQty').value=s.palQty||300;$('pLot').value=stLot(s);openM('ovPal')}
+function savePallet(){const s=ST[PST];
+  addLog('พาเลท','ปิดพาเลท '+$('pNo').value+' จำนวน '+$('pQty').value+' ชิ้น · จัดเก็บ '+$('pLoc').value,'b-b',s);
+  s.pal++;s.palQty=0;closeM('ovPal');renderOpr();toast('บันทึกพาเลทเรียบร้อย')}
+
+/* ===== ANALYTICS ===== */
+$('anaMachine').innerHTML=LINES.map(L=>`<option value="${L.id}">${L.name} (${L.mc}) · ${L.proc}</option>`).join('');
+$('anaMachine').onchange=renderAnalytics;
+function renderAnalytics(){
+  const id=$('anaMachine').value||'600',L=LN(id);
+  const rs=RECORDS.filter(r=>r.line===id);
+  const act=sum(rs,'actual'),ng=sum(rs,'ng'),dtm=sum(rs,'dtMin'),oee=avg(rs.map(r=>r.oee));
+  $('anaKpi').innerHTML=[kpi('ผลผลิตสะสม 14 วัน',nf(act),'ชิ้น','ok'),
+    kpi('Downtime รวม',nf(dtm),'นาที',dtm>400?'warn':'ok',(dtm/60).toFixed(1)+' ชั่วโมง'),
+    kpi('อัตราของเสียเฉลี่ย',(ng/act*100).toFixed(2),'%',ng/act*100<=1.5?'ok':'bad'),
+    kpi('OEE เฉลี่ย',oee.toFixed(1),'%',oee>=85?'ok':'warn')].join('');
+  const m={};rs.forEach(r=>r.dt.forEach(d=>m[d.reason]=(m[d.reason]||0)+d.min));
+  const arr=Object.entries(m).sort((a,b)=>b[1]-a[1]).slice(0,7);
+  const t=arr.reduce((a,b)=>a+b[1],0)||1;let c=0;const cu=arr.map(x=>{c+=x[1];return +(c/t*100).toFixed(1)});
+  const top=arr[0]||['—',0];
+  $('aiBox').innerHTML=`<h4>🤖 AI Insights &amp; Recommended Action Plan — ${L.mc} (${L.proc})</h4>
+    <p style="margin:0 0 8px;color:#f8fafc">วิเคราะห์ข้อมูลย้อนหลัง 14 วัน (${rs.length} กะ) พบว่าสาเหตุการสูญเสียเวลาสูงสุดคือ
+      <b>${esc(top[0])}</b> รวม <b>${top[1]} นาที</b> (${(top[1]/t*100).toFixed(1)}% ของ Downtime ทั้งหมด)
+      และของเสียหลักคือ <b>${Object.entries(rs.reduce((o,r)=>{Object.entries(r.defs).forEach(([k,v])=>o[k]=(o[k]||0)+v);return o},{})).sort((a,b)=>b[1]-a[1])[0][0]}</b></p>
+    <div style="background:rgba(16,185,129,.1);border-left:4px solid #10b981;padding:10px;color:#34d399;font-size:13px">
+      <b>💡 ข้อเสนอแนะ:</b> ${L.proc==='Stamping'
+        ? 'ประยุกต์ใช้ SMED ลดเวลา Die Change และตรวจสอบแรงดัน Cushion ให้คงที่ คาดว่าเพิ่ม OEE ได้ 3–5%'
+        : 'ปรับรอบการตั้งมีดตัดและตั้งค่าความตึงม้วนเหล็ก (Coil Tension) อัตโนมัติ คาดว่าลดของเสียลงได้ราว 35%'}</div>`;
+  mk('cAnaPareto',{data:{labels:arr.map(x=>x[0].split(' (')[0]),datasets:[
+    {type:'bar',label:'นาที',data:arr.map(x=>x[1]),backgroundColor:'#f59e0b',borderRadius:4,yAxisID:'y'},
+    {type:'line',label:'สะสม %',data:cu,borderColor:'#ef4444',pointRadius:3,yAxisID:'y1'}]},
+    options:{...baseOpt,scales:{x:{...G,ticks:{maxRotation:40,minRotation:25,font:{size:10}}},y:{...G,beginAtZero:true},y1:{position:'right',max:100,beginAtZero:true,grid:{display:false},border:{display:false}}}}});
+  const dm={};rs.forEach(r=>Object.entries(r.defs).forEach(([k,v])=>dm[k]=(dm[k]||0)+v));
+  const da=Object.entries(dm).sort((a,b)=>b[1]-a[1]);
+  mk('cAnaDefect',{type:'bar',data:{labels:da.map(x=>x[0].split(' (')[0]),datasets:[{label:'ชิ้น',data:da.map(x=>x[1]),backgroundColor:'#ef4444',borderRadius:4}]},
+    options:{...baseOpt,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{...G,beginAtZero:true},y:{grid:{display:false},border:{display:false},ticks:{font:{size:10}}}}}});
+  $('tblAnaRec').querySelector('tbody').innerHTML=LINES.map(x=>{
+    const r2=RECORDS.filter(r=>r.line===x.id);const mm={};r2.forEach(r=>r.dt.forEach(d=>mm[d.reason]=(mm[d.reason]||0)+d.min));
+    const t2=Object.entries(mm).sort((a,b)=>b[1]-a[1])[0]||['—',0];const o2=avg(r2.map(r=>r.oee));
+    const rec=x.proc==='Stamping'?'ใช้ SMED ลดเวลาเปลี่ยนแม่พิมพ์ + ตรวจสอบ Cushion Pressure':'ปรับ Coil Tension อัตโนมัติ + ตั้งรอบลับมีดตัด';
+    return `<tr><td><b style="color:${x.color}">${x.mc}</b><div class="note">${x.proc}</div></td>
+      <td style="white-space:normal">${esc(t2[0])}</td><td class="tr">${t2[1]} นาที</td>
+      <td class="tc"><b style="color:${o2>=85?'#34d399':'#fbbf24'}">${o2.toFixed(1)}%</b></td>
+      <td style="white-space:normal;min-width:220px">${rec}</td>
+      <td class="tc"><span class="bg ${o2>=85?'b-g':'b-a'}">${o2>=85?'เฝ้าติดตาม':'กำลังดำเนินการ'}</span></td></tr>`}).join('');
+}
+
+/* ===== TRACEABILITY ===== */
+function emptyTrace(){return `<div class="card"><div class="empty"><div style="font-size:38px;opacity:.35">🔗</div>
+  <div style="margin-top:8px">กรอกคำค้นหาเพื่อแสดงห่วงโซ่การผลิต<br><span class="note">วัตถุดิบ (Coil) → การผลิต → คุณภาพ → พาเลท/จัดส่ง</span></div></div></div>`}
+(function(){const r=RECORDS.filter(x=>x.pallets.length).slice(-1)[0];
+  const list=[r.pallets[0].no,r.lot,r.part,r.coil];
+  $('trcQ').value=r.lot;
+  $('trcChips').innerHTML=list.map(x=>`<span class="chip" onclick="document.getElementById('trcQ').value='${x}';runTrace()">${x}</span>`).join('')})();
+function runTrace(){
+  const q=$('trcQ').value.trim().toUpperCase();
+  if(!q){$('trcRes').innerHTML=emptyTrace();return}
+  let found=[],pal=null;
+  RECORDS.forEach(r=>{const h=r.pallets.find(p=>p.no.toUpperCase()===q);
+    if(h){found.push(r);pal=h}else if(r.lot.toUpperCase()===q||r.coil.toUpperCase()===q||r.part.toUpperCase()===q)found.push(r)});
+  if(!found.length){$('trcRes').innerHTML=`<div class="card"><div class="empty">❌ ไม่พบข้อมูลสำหรับ "<b>${esc(q)}</b>"<br>
+    <span class="note">ลองคลิกตัวอย่างด้านบน</span></div></div>`;return}
+  found=found.sort((a,b)=>b.date.localeCompare(a.date)).slice(0,3);
+  $('trcRes').innerHTML=`<div class="card" style="background:var(--blue-l);border-color:rgba(59,130,246,.3)">
+    <b>พบ ${found.length} ชุดการผลิตที่เกี่ยวข้องกับ "${esc(q)}"</b>
+    <div class="note">แสดงห่วงโซ่ย้อนกลับตั้งแต่วัตถุดิบจนถึงการจัดส่ง</div></div>`+found.map(r=>traceCard(r,pal)).join('');
+}
+function traceCard(r,pal){
+  const c=COILS.find(x=>x.lot===r.coil)||COILS[0],L=LN(r.line);
+  const pals=pal?[pal]:r.pallets.slice(0,6);
+  const okq=r.qrs.filter(q=>q.judge==='OK').length,ngq=r.qrs.filter(q=>q.judge==='NG').length;
+  return `<div class="card" style="margin-top:14px;border-top:4px solid ${L.color}">
+  <div class="card-h"><h3>🔗 Lot ${r.lot}</h3><span class="sub">${thD(r.dateObj)} · ${r.lineName} (${r.mc}) · ${r.proc} · ${r.shift}</span></div>
+  <div class="chain">
+    <div class="step"><div class="nm">1</div><h4 style="font-size:14px;color:#60a5fa">วัตถุดิบ — ม้วนเหล็ก (Coil)</h4>
+      <div class="kv"><div><div class="k">Coil Lot</div><div class="v mono">${c.lot}</div></div>
+        <div><div class="k">ผู้จำหน่าย</div><div class="v" style="font-size:12.5px">${c.supplier}</div></div>
+        <div><div class="k">เกรดวัสดุ</div><div class="v">${c.mat}</div></div>
+        <div><div class="k">Heat No.</div><div class="v mono">${c.heat}</div></div>
+        <div><div class="k">ความหนา × กว้าง</div><div class="v">${c.th} × ${c.width} mm</div></div>
+        <div><div class="k">น้ำหนัก</div><div class="v">${nf(c.weight)} kg</div></div>
+        <div><div class="k">วันที่รับเข้า</div><div class="v">${thD(new Date(c.recv))}</div></div>
+        <div><div class="k">ใบรับรอง (MTC)</div><div class="v mono">${c.cert}</div></div>
+        <div><div class="k">ความแข็ง / TS / EL</div><div class="v" style="font-size:12px">${c.hard} · ${c.ts} · ${c.el}</div></div>
+        <div><div class="k">ผลตรวจรับ</div><div class="v"><span class="bg ${c.insp==='ผ่าน'?'b-g':'b-a'}">${c.insp}</span></div></div></div></div>
+    <div class="step s2"><div class="nm">2</div><h4 style="font-size:14px;color:#22d3ee">บันทึกการผลิต (Daily Production Record)</h4>
+      <div class="kv"><div><div class="k">วันที่ / กะ</div><div class="v" style="font-size:12.5px">${thD(r.dateObj)} · ${r.shift}</div></div>
+        <div><div class="k">เครื่อง / กระบวนการ</div><div class="v" style="font-size:12.5px;color:${L.color}">${r.mc} · ${r.proc}</div></div>
+        <div><div class="k">Part No.</div><div class="v mono">${r.part}</div></div>
+        <div><div class="k">ชื่อชิ้นงาน</div><div class="v" style="font-size:12px">${r.partName}</div></div>
+        <div><div class="k">แม่พิมพ์</div><div class="v mono">${r.die}</div></div>
+        <div><div class="k">แผน / ผลิตจริง</div><div class="v">${nf(r.plan)} / ${nf(r.actual)}</div></div>
+        <div><div class="k">OK / NG</div><div class="v"><span style="color:#34d399">${nf(r.ok)}</span> / <span style="color:#f87171">${nf(r.ng)}</span></div></div>
+        <div><div class="k">อัตราของเสีย</div><div class="v">${r.ngRate.toFixed(2)}%</div></div>
+        <div><div class="k">Downtime</div><div class="v">${r.dtMin} นาที (${r.dt.length} ครั้ง)</div></div>
+        <div><div class="k">OEE</div><div class="v">${r.oee.toFixed(1)}%</div></div>
+        <div><div class="k">ผู้ปฏิบัติงาน</div><div class="v" style="font-size:12px">${r.opr}</div></div>
+        <div><div class="k">หัวหน้างาน</div><div class="v" style="font-size:12px">${r.leader}</div></div></div></div>
+    <div class="step s3"><div class="nm">3</div><h4 style="font-size:14px;color:#fbbf24">บันทึกคุณภาพระหว่างผลิต (Quality Record)</h4>
+      <div class="note" style="margin-top:4px">ตรวจ ${r.qrs.length} จุด · ผ่าน ${okq} · ไม่ผ่าน ${ngq} · ผู้ตรวจหลัก ${r.qc}</div>
+      <div class="tw" style="margin-top:10px;max-height:260px;overflow:auto"><table>
+        <thead><tr><th>เวลา</th><th>จุดตรวจ</th><th class="tr">ชิ้นที่</th><th class="tr">Thk</th><th class="tr">Pitch</th><th class="tr">DieH</th><th class="tc">ผล</th><th>ของเสีย</th><th>Pallet</th></tr></thead>
+        <tbody>${r.qrs.map(q=>`<tr><td class="mono">${q.time}</td><td style="font-size:11.5px">${q.point}</td>
+          <td class="tr mono">${nf(q.at)}</td><td class="tr mono">${q.th.toFixed(3)}</td><td class="tr mono">${q.pi.toFixed(2)}</td>
+          <td class="tr mono">${q.dh.toFixed(2)}</td><td class="tc"><span class="bg ${q.judge==='OK'?'b-g':'b-r'}">${q.judge}</span></td>
+          <td style="font-size:11.5px">${q.def}${q.ngq?' ('+q.ngq+')':''}</td><td class="mono" style="font-size:11px">${q.pal}</td></tr>`).join('')}</tbody></table></div></div>
+    <div class="step s4"><div class="nm">4</div><h4 style="font-size:14px;color:#34d399">พาเลท &amp; การจัดส่ง (Lot Control / Shipping)</h4>
+      <div class="note" style="margin-top:4px">พาเลททั้งหมดใน Lot นี้: ${r.pallets.length} พาเลท${pal?' · แสดงเฉพาะพาเลทที่ค้นหา':''}</div>
+      ${pals.length?`<div class="tw" style="margin-top:10px"><table><thead><tr><th>Pallet No.</th><th class="tr">จำนวน</th><th>ที่จัดเก็บ</th><th>ลูกค้าปลายทาง</th><th>วันที่จัดส่ง</th><th>ใบส่งของ</th><th>รถขนส่ง</th></tr></thead>
+        <tbody>${pals.map(p=>`<tr${pal&&p.no===pal.no?' style="background:rgba(16,185,129,.15)"':''}>
+          <td class="mono"><b>${p.no}</b></td><td class="tr">${nf(p.qty)}</td><td>${p.loc}</td><td>${p.cust}</td>
+          <td>${p.ship==='-'?'<span class="bg b-a">รอจัดส่ง</span>':thD(new Date(p.ship))}</td>
+          <td class="mono">${p.inv}</td><td style="font-size:12px">${p.truck}</td></tr>`).join('')}</tbody></table></div>`
+        :'<div class="note" style="margin-top:8px">ยังไม่มีพาเลทที่ปิดใน Lot นี้</div>'}</div>
+  </div></div>`;
+}
+
+/* ===== PLC SIM + CLOCK ===== */
+setInterval(()=>{
+  LINES.forEach(L=>{const s=ST[L.id];
+    if(s.run&&!s.alarm){s.spm=ri(s.cap-3,s.cap+1);s.ld=ri(66,91);s.ot=Math.min(62,s.ot+rf(-.3,.4,1))}
+    else{s.spm=0;s.ld=Math.max(0,s.ld-ri(4,15));s.ot=Math.max(38,s.ot-rf(0,.3,1))}});
+  if($('page-opr').classList.contains('active')){const s=CS();$('plcTime').textContent=now();
+    const vs=document.querySelectorAll('#plcParams .v');if(vs[0])vs[0].textContent=s.run?s.spm:0;
+    if(vs[4])vs[4].textContent=s.run?s.ld:0;if(vs[5])vs[5].textContent=Math.round(s.ot)}
+  if($('page-dash').classList.contains('active')&&activeSub==='exec'){renderMcCards();renderMcTable()}
+},2000);
+setInterval(()=>{const d=new Date();$('hdClock').textContent=now();
+  $('hdShift').textContent=(d.getHours()>=8&&d.getHours()<20)?'กะ A (08:00-20:00)':'กะ B (20:00-08:00)'},1000);
+document.querySelectorAll('.ov').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('on')}));
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.ov.on').forEach(o=>o.classList.remove('on'))});
+
+/* ===== INIT ===== */
+renderExec();renderLineView();runFilter();renderShiftReport();renderOpr();renderAnalytics();runTrace();renderExecDetail();
+</script>
+</body>
+</html>
